@@ -164,7 +164,7 @@ func cmdRequestNSP(epOut *gousb.OutEndpoint, epIn *gousb.InEndpoint) {
 	fileReader := bufio.NewReader(fileHandle)
 
 	var currentOffset uint64
-	var readChunkSize uint64 = 8388608 // 8mb
+	var readChunkSize uint64 = 1048576 // 1mb
 
 	for currentOffset < requestedPieceSize {
 		if currentOffset+readChunkSize >= requestedPieceSize {
