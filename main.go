@@ -1,13 +1,5 @@
 package main
 
-/* For now this is basically a 1:1 rewrite of tinfoil's usb_install_pc.py
-May help alleviate some trouble users have with python since this will
-	compile to a standalone exe with no dependencies.
-
-Future plans include a gui and a few refinements.
-
-*/
-
 import (
 	"bufio"
 	"encoding/binary"
@@ -19,6 +11,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"github.com/AlecAivazis/survey"
 	"github.com/google/gousb"
 )
 
@@ -26,7 +19,7 @@ var cmdTypeResponse = byte(1)
 var cmdIDExit uint64 // = 0
 var cmdIDRequestNSP uint32 = 1
 
-// listNSPs returns list of absolute paths to NSP files with newline appended
+// listNSPs returns list of absolute paths to NSP files
 func listNSPs(dir string) ([]string, error) {
 	nspList := []string{}
 
@@ -37,18 +30,16 @@ func listNSPs(dir string) ([]string, error) {
 
 	for _, file := range files {
 		if !file.IsDir() && filepath.Ext(file.Name()) == ".nsp" {
-			nspList = append(nspList, filepath.Join(dir, file.Name())+"\n")
+			nspList = append(nspList, filepath.Join(dir, file.Name()))
 		}
 	}
 	return nspList, nil
 }
 
 // sendNSPList sends NSPs in nspDir to Switch
-func sendNSPList(nspDir string, epOut *gousb.OutEndpoint) error {
-	nspList, err := listNSPs(nspDir)
-	if err != nil {
-		fmt.Printf("%#v", err)
-		return err
+func sendNSPList(nspList []string, epOut *gousb.OutEndpoint) error {
+	for i, s := range nspList {
+		nspList[i] = s + "\n"
 	}
 
 	// Tinfoil USB List 0
@@ -61,9 +52,8 @@ func sendNSPList(nspDir string, epOut *gousb.OutEndpoint) error {
 	// 0x00 * 8 Padding
 	epOut.Write(make([]byte, 8))
 
-	fmt.Println("Sending NSP list:")
+	fmt.Println("Sending NSP list")
 	for _, nsp := range nspList {
-		fmt.Print(nsp)
 		epOut.Write([]byte(nsp))
 	}
 	return nil
@@ -71,7 +61,7 @@ func sendNSPList(nspDir string, epOut *gousb.OutEndpoint) error {
 
 // pollCommands waits for command from Switch and calls appropriate method
 // Currently the only supported method is fileRangeCmd
-func pollCommands(nspDir string, epOut *gousb.OutEndpoint, epIn *gousb.InEndpoint) {
+func pollCommands(epOut *gousb.OutEndpoint, epIn *gousb.InEndpoint) {
 	fmt.Println("Waiting for Switch...")
 	for true {
 		// Read 32 bytes from switch
@@ -79,11 +69,11 @@ func pollCommands(nspDir string, epOut *gousb.OutEndpoint, epIn *gousb.InEndpoin
 		_, err := epIn.Read(inputBuf)
 
 		if err != nil {
-			fmt.Printf("%#v", err)
+			printErr(err)
 			continue
 		}
 
-		// Its magic!
+		// Oh-oh its magic!
 		if string(inputBuf[:4]) != "TUC0" {
 			continue
 		}
@@ -100,10 +90,8 @@ func pollCommands(nspDir string, epOut *gousb.OutEndpoint, epIn *gousb.InEndpoin
 
 // sendRespHeader sends response header to Switch to prepare it for data payload
 // This should preface all data transmissions to Switch
+// Header is 32 bytes as described in each step below
 func sendRespHeader(epOut *gousb.OutEndpoint, cmdID uint32, dataSize uint64) {
-	// # todo
-	// Sends 32 bits total. Can make a single bytearray and send all at once?
-
 	// Tinfoil USB Command 0
 	epOut.Write([]byte("TUC0"))
 	// Send cmdTypeResponse (1) as 4-byte array
@@ -125,9 +113,9 @@ func sendRespHeader(epOut *gousb.OutEndpoint, cmdID uint32, dataSize uint64) {
 }
 
 // cmdRequestNSP handles request from Switch for NSP payload
-// This is called many times as the Switch requests chunks of the payload
-// The Switch will request a payload of requestedChunkSize bytes starting at startOffset in the nsp file
-// This requested chunk is broken up into 8mb chunks and sent to tinfoil
+// This is called many times as the Switch requests different pieces of the NSP
+// The Switch will request a payload of requestedPieceSize bytes starting at requestedPieceOffset in the NSP file
+// This requested piece is broken up into 1mb chunks and sent to tinfoil
 func cmdRequestNSP(epOut *gousb.OutEndpoint, epIn *gousb.InEndpoint) {
 	// Read 32 bytes from switch
 	inputBuf := make([]byte, 32)
@@ -149,8 +137,6 @@ func cmdRequestNSP(epOut *gousb.OutEndpoint, epIn *gousb.InEndpoint) {
 
 	fmt.Printf("Piece Size: %d, Piece Offset: %d, Name Len: %d, Name: %s \n", requestedPieceSize, requestedPieceOffset, nspNameLen, string(nspNameBytes))
 	sendRespHeader(epOut, cmdIDRequestNSP, requestedPieceSize)
-
-	// # todo starting here break this out into a separate sendRequestedChunk function
 
 	fileHandle, err := os.Open(string(nspNameBytes))
 	if err != nil {
@@ -193,10 +179,14 @@ func cmdRequestNSP(epOut *gousb.OutEndpoint, epIn *gousb.InEndpoint) {
 
 // exit simply prevents the console window from closing immediately
 func exit() {
-	fmt.Println("Press any key to close")
-	var i string
-	fmt.Scanln(&i)
+	fmt.Println("Press Enter to exit")
+	var input string
+	fmt.Scanf("%s", &input)
 	os.Exit(0)
+}
+
+func printErr(err error) {
+	fmt.Println(fmt.Errorf("%#v", err))
 }
 
 func main() {
@@ -232,12 +222,28 @@ func main() {
 		exit()
 	}
 
-	fmt.Println("Enter NSP Directory: ")
-	var nspDir string
-	fmt.Scanln(&nspDir)
+	nspDir := ""
+	input := &survey.Input{
+		Message: "NSP Directory:",
+	}
+	survey.AskOne(input, &nspDir, nil)
 
-	if sendNSPList(nspDir, epOut) == nil {
-		pollCommands(nspDir, epOut, epIn)
+	nspList, err := listNSPs(nspDir)
+	if err != nil {
+		printErr(err)
+		exit()
+	}
+
+	selectedNSPs := []string{}
+	multiselect := &survey.MultiSelect{
+		Message:  "NSPs to send to TinFoil",
+		Options:  nspList,
+		PageSize: 15,
+	}
+	survey.AskOne(multiselect, &selectedNSPs, nil)
+
+	if sendNSPList(selectedNSPs, epOut) == nil {
+		pollCommands(epOut, epIn)
 	}
 
 	exit()
