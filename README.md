@@ -1,7 +1,7 @@
 # AluminumFoil
 Standalone USB installer for TinFoil
 
-Based on XorTroll's [tinfoil_usb_pc.py](https://github.com/XorTroll/Tinfoil/blob/master/tools/usb_install_pc.py)
+Based on @Adubbz's [tinfoil_usb_pc.py](https://github.com/XorTroll/Tinfoil/blob/master/tools/usb_install_pc.py)
 
 Intended to operate as a standalone alternative to those unable or unwilling to install python and required packages.
 
