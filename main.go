@@ -197,7 +197,7 @@ func main() {
 
 	nxDevice, err := usbCTX.OpenDeviceWithVIDPID(vid, pid)
 
-	if err != nil {
+	if err != nil || nxDevice == nil {
 		fmt.Println("Unable to open USB connection to Switch")
 		exit()
 	}
