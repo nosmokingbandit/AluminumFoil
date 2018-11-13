@@ -5,9 +5,11 @@ Based on @Adubbz's [tinfoil_usb_pc.py](https://github.com/XorTroll/Tinfoil/blob/
 
 Intended to operate as a standalone alternative to those unable or unwilling to install python and required packages.
 
-### Usage
+## Usage
 
-##### First run setup
+#### First run setup
+
+##### Windows
 In order to communicate with your Switch you must first install the libusbk driver. This only needs to be done once and will not affect your ability to send RCM payloads.
 
 * Download [Zadig](https://zadig.akeo.ie/)
@@ -16,10 +18,19 @@ In order to communicate with your Switch you must first install the libusbk driv
 
 * Open Zadig. In Options enable `List All Devices`. Select `libnx USB comms`. Select the driver `libusbk` and click `Replace Driver`
 
+##### Mac OSX
+
+OSX requires libusb due to the way it handles (or rather *doesn't* handle) static libraries.
+
+Currently the easiest way to accomplish this is with [Homebrew](https://brew.sh/)
+
+    $ brew install libusb
+
+---
+
 Your PC can now communicate with TinFoil. Leave your Switch on the `USB Install` screen.
 
-
-##### Installing NSPs
+#### Installing NSPs
 
 * Connect your Switch to your pc and open Tinfoil's `USB Install` screen.
 
@@ -39,4 +50,3 @@ Building AluminumFoil requires [libusb](https://libusb.info/).
 Run with `go run main.go` or build with `./build.sh` and execute the resulting binary. `build.sh` includes the neccesary compiler flags to include libsub in the binary.
 
 AluminumFoil has been tested on Windows 10 x64. AluminumFoil is in Alpha and should not be expected to work under any circumstances. I am not responsible for lost data.
-
