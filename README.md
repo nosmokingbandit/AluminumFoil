@@ -5,7 +5,6 @@ Standalone GUI USB installer for GoldLeaf
 
 #### First run setup
 
-##### Windows
 In order to communicate with your Switch you must first install the libusbk driver. This only needs to be done once and will not affect your ability to send RCM payloads.
 
 * Download [Zadig](https://zadig.akeo.ie/)
