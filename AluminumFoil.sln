@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AluminumFoil", "AluminumFoil\AluminumFoil.csproj", "{02F68E2A-EFB3-4FF4-B0E1-27B03B02E9CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{02F68E2A-EFB3-4FF4-B0E1-27B03B02E9CD}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{02F68E2A-EFB3-4FF4-B0E1-27B03B02E9CD}.Debug|x86.ActiveCfg = Debug|x86
+		{02F68E2A-EFB3-4FF4-B0E1-27B03B02E9CD}.Debug|x86.Build.0 = Debug|x86
+		{02F68E2A-EFB3-4FF4-B0E1-27B03B02E9CD}.Release|Any CPU.ActiveCfg = Release|x86
+		{02F68E2A-EFB3-4FF4-B0E1-27B03B02E9CD}.Release|x86.ActiveCfg = Release|x86
+		{02F68E2A-EFB3-4FF4-B0E1-27B03B02E9CD}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5E07788B-B55E-4538-A14D-15A0DC57F1C4}
+	EndGlobalSection
+EndGlobal

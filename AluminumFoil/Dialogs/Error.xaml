@@ -1,0 +1,29 @@
+﻿<Window x:Class="AluminumFoil.Dialogs.Error"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AluminumFoil.Dialogs"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        Title="{Binding Title}"
+        Width="300"
+        SizeToContent="Height"
+        ResizeMode="NoResize"
+        >
+    <StackPanel Orientation="Vertical" Margin="10">
+        <StackPanel Orientation="Horizontal">
+                <Image Source="/AluminumFoil;component/Assets/error_96.png" Height="96"></Image>
+            <StackPanel Orientation="Vertical">
+                <Label Content="{Binding Title}" FontWeight="Bold"></Label>
+                <Label Width="180">
+                    <Label.Content>
+                        <AccessText TextWrapping="Wrap" Text="{Binding Message}"/>
+                    </Label.Content>
+                </Label>
+            </StackPanel>
+        </StackPanel>
+        <Button Click="HandleClose" Padding="5">Close</Button>
+    </StackPanel>
+
+</Window>
