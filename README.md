@@ -1,6 +1,8 @@
 # AluminumFoil
 Standalone GUI USB installer for GoldLeaf
 
+![Screenshot](https://raw.githubusercontent.com/nosmokingbandit/AluminumFoil/master/Screenshots/Capture.PNG)
+
 ## Usage
 
 #### First run setup
