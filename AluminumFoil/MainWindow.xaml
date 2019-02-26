@@ -31,7 +31,7 @@
                 <TextBox Grid.Column="1" Padding="5" IsReadOnly="True" Text="{Binding OpenedNSP.FilePath}" VerticalAlignment="Center">
                 </TextBox>
                 <Button Grid.Column="1" Width="24" Height="24" Margin="0,0,2,0" BorderThickness="0" HorizontalAlignment="Right" Command="{Binding CloseNSP}">
-                    <Image Source="/AluminumFoil;component/Assets/close_24.png"></Image>
+                    <Image Source="/AluminumFoil;component/Assets/Images/close_24.png"></Image>
                     <Button.Background>
                         <LinearGradientBrush StartPoint="0,1" EndPoint="1,1">
                             <GradientStop Color="Transparent" Offset="0.0" />

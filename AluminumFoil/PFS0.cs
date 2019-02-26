@@ -85,6 +85,7 @@ namespace AluminumFoil
             }
         }
 
+        // TODO read chunksize from config
         public IEnumerable<byte[]> ReadFile(int ind, int ChunkSize = 0x100000)
             // Generator to read file from NSP
             // ind: index of file defined by nca header

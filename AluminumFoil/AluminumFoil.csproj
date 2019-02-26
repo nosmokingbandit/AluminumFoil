@@ -186,7 +186,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="AluminumFoil_TemporaryKey.pfx" />
-    <None Include="Assets\Icon.ai" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -209,40 +208,44 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\error_32.png" />
-    <Resource Include="Assets\error_64.png" />
-    <Resource Include="Assets\error_96.png" />
-    <Resource Include="Assets\finished_32.png" />
-    <Resource Include="Assets\finished_64.png" />
-    <Resource Include="Assets\finished_96.png" />
     <Resource Include="Assets\icon.ico" />
-    <Resource Include="Assets\idle_32.png" />
-    <Resource Include="Assets\idle_64.png" />
-    <Resource Include="Assets\idle_96.png" />
-    <Resource Include="Assets\installing_32.png" />
-    <Resource Include="Assets\installing_64.png" />
-    <Resource Include="Assets\installing_96.png" />
-    <Resource Include="Assets\waiting_32.png" />
-    <Resource Include="Assets\waiting_64.png" />
-    <Resource Include="Assets\waiting_96.png" />
-    <Resource Include="Assets\warning_32.png" />
-    <Resource Include="Assets\warning_64.png" />
-    <Resource Include="Assets\warning_96.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
-    <Resource Include="Assets\warning_24.png" />
-    <Resource Include="Assets\error_24.png" />
-    <Resource Include="Assets\finished_24.png" />
-    <Resource Include="Assets\idle_24.png" />
-    <Resource Include="Assets\installing_24.png" />
     <Resource Include="FodyWeavers.xml">
       <SubType>Designer</SubType>
     </Resource>
-    <Resource Include="Assets\close_24.png" />
     <EmbeddedResource Include="Costura32\libusb-1.0.dll" />
-    <Resource Include="Assets\waiting_24.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\close_24.png" />
+    <Resource Include="Assets\Images\error_24.png" />
+    <Resource Include="Assets\Images\error_32.png" />
+    <Resource Include="Assets\Images\error_64.png" />
+    <Resource Include="Assets\Images\error_96.png" />
+    <Resource Include="Assets\Images\finished_24.png" />
+    <Resource Include="Assets\Images\finished_32.png" />
+    <Resource Include="Assets\Images\finished_64.png" />
+    <Resource Include="Assets\Images\finished_96.png" />
+    <Resource Include="Assets\Images\Icon.png" />
+    <Resource Include="Assets\Images\idle_24.png" />
+    <Resource Include="Assets\Images\idle_32.png" />
+    <Resource Include="Assets\Images\idle_64.png" />
+    <Resource Include="Assets\Images\idle_96.png" />
+    <Resource Include="Assets\Images\installing_24.png" />
+    <Resource Include="Assets\Images\installing_32.png" />
+    <Resource Include="Assets\Images\installing_64.png" />
+    <Resource Include="Assets\Images\installing_96.png" />
+    <Resource Include="Assets\Images\waiting_24.png" />
+    <Resource Include="Assets\Images\waiting_32.png" />
+    <Resource Include="Assets\Images\waiting_64.png" />
+    <Resource Include="Assets\Images\waiting_96.png" />
+    <Resource Include="Assets\Images\warning_24.png" />
+    <Resource Include="Assets\Images\warning_32.png" />
+    <Resource Include="Assets\Images\warning_64.png" />
+    <Resource Include="Assets\Images\warning_96.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.4.0.2\build\Fody.targets" Condition="Exists('..\packages\Fody.4.0.2\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

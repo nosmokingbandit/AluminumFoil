@@ -47,17 +47,16 @@ namespace AluminumFoil.ViewModels
             }
         }
 
-        private string _StatusBarIcon = "/AluminumFoil;component/Assets/idle_24.png";
+        private string _StatusBarIcon = "/AluminumFoil;component/Assets/Images/idle_24.png";
         public string StatusBarIcon
         {
             get => _StatusBarIcon;
             set
             {
-                this.RaiseAndSetIfChanged(ref _StatusBarIcon, string.Format("/AluminumFoil;component/Assets/{0}_24.png", value));
+                this.RaiseAndSetIfChanged(ref _StatusBarIcon, string.Format("/AluminumFoil;component/Assets/Images/{0}_24.png", value));
             }
         }
-
-
+        
         private AluminumFoil.PFS0 _OpenedNSP;
         public AluminumFoil.PFS0 OpenedNSP
         {
