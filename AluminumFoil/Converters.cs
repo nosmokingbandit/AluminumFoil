@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Globalization;
 using System.Windows.Data;
@@ -14,7 +14,7 @@ namespace BindingConverters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var contents = value as ObservableCollection<AluminumFoil.PFS0File>;
+            var contents = value as ObservableCollection<AluminumFoil.NSP.PFS0File>;
             return contents.Where(x => x.Name.EndsWith("nca"));
         }
 

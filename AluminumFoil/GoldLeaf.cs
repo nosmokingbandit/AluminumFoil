@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using System;
 using ExtensionMethods;
@@ -54,7 +54,7 @@ namespace GoldLeaf
             return readBuffer;
         }
 
-        public IEnumerable<Tuple<string, string>> InstallNSP(AluminumFoil.PFS0 nsp)
+        public IEnumerable<Tuple<string, string>> InstallNSP(AluminumFoil.NSP.PFS0 nsp)
         {
             // Installs NSP to Switch via GoldLeaf
             int txLen;

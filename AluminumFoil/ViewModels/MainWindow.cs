@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using ReactiveUI;
 using System.Reactive;
@@ -57,8 +57,8 @@ namespace AluminumFoil.ViewModels
             }
         }
         
-        private AluminumFoil.PFS0 _OpenedNSP;
-        public AluminumFoil.PFS0 OpenedNSP
+        private AluminumFoil.NSP.PFS0 _OpenedNSP;
+        public AluminumFoil.NSP.PFS0 OpenedNSP
         {
             get => _OpenedNSP;
             set
@@ -83,7 +83,7 @@ namespace AluminumFoil.ViewModels
 
             try
             {
-                OpenedNSP = new AluminumFoil.PFS0(dlg.FileName);
+                OpenedNSP = new AluminumFoil.NSP.PFS0(dlg.FileName);
             } 
             catch (Exception e)
             {
