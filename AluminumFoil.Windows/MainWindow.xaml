@@ -1,0 +1,73 @@
+﻿<Window x:Class="AluminumFoil.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:AluminumFoil.Windows.BindingConverters"
+        mc:Ignorable="d"
+        Title="Aluminum Foil"
+        SizeToContent="Height"
+        Width="400"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <converters:NCAFilter x:Key="NCAFilter"/>
+        <converters:VisibleIfExists x:Key="VisibleIfExists"/>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="5" />
+        </Style>
+    </Window.Resources>
+
+    <StackPanel>
+        <StackPanel Margin="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Padding="5" Command="{Binding OpenNSP}">Open NSP</Button>
+                <TextBox Grid.Column="1" Padding="5" IsReadOnly="True" Text="{Binding OpenedNSP.FilePath}" VerticalAlignment="Center">
+                </TextBox>
+                <Button Grid.Column="1" Width="24" Height="24" Margin="0,0,2,0" BorderThickness="0" HorizontalAlignment="Right" Command="{Binding CloseNSP}">
+                    <Image Source="/AluminumFoil;component/Assets/Images/close_24.png"></Image>
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0,1" EndPoint="1,1">
+                            <GradientStop Color="Transparent" Offset="0.0" />
+                            <GradientStop Color="White" Offset="0.5" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+
+                </Button>
+            </Grid>
+
+            <StackPanel Orientation="Vertical" Visibility="{Binding OpenedNSP, Converter={StaticResource VisibleIfExists}}">
+                <GroupBox Header=" Contents " Margin="0,5,0,0">
+                    <ItemsControl ItemsSource="{Binding OpenedNSP.Contents, Converter={StaticResource NCAFilter}}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" Margin="10">
+                                    <Grid>
+                                        <TextBlock Text="{Binding Name}"></TextBlock>
+                                        <TextBlock Text="{Binding HumanSize}" HorizontalAlignment="Right"></TextBlock>
+                                    </Grid>
+                                    <ProgressBar MinHeight="4" Maximum="{Binding Size}" Value="{Binding Transferred}"></ProgressBar>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </GroupBox>
+
+                <Button Command="{Binding InstallNSP}" Margin="0,10,0,0">Install</Button>
+            </StackPanel>
+        </StackPanel>
+
+        <DockPanel>
+            <StatusBar DockPanel.Dock="Bottom" Height="28" BorderBrush="SlateGray" BorderThickness="0,1,0,0">
+                <Image Name="StatusIcon" Source="{Binding StatusBarIcon}" Height="24" Width="24" VerticalAlignment="Center"></Image>
+                <TextBlock Text="{Binding StatusBar}" VerticalAlignment="Center"></TextBlock>
+            </StatusBar>
+        </DockPanel>
+
+    </StackPanel>
+</Window>
