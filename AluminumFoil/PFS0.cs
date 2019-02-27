@@ -4,7 +4,6 @@ using ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
  
 namespace AluminumFoil.NSP
 {
@@ -40,8 +39,8 @@ namespace AluminumFoil.NSP
 
 
                 byte[] magic = reader.ReadBytes(0x4);
-                uint fileCount = BitConverter.ToUInt32(reader.ReadBytes(0x4), 0);
-                uint stringTableLen = BitConverter.ToUInt32(reader.ReadBytes(0x4), 0);
+                uint fileCount = reader.ReadUInt32();
+                uint stringTableLen = reader.ReadUInt32();
                 reader.ReadBytes(0x4); // Null/reserved area
                 byte[] fileEntryTable = reader.ReadBytes((int)fileCount * FileEntryLen);
                 StringTable = reader.ReadBytes((int)stringTableLen);
@@ -49,7 +48,7 @@ namespace AluminumFoil.NSP
 
                 if (!magic.SequenceEqual(PFS0MAGIC))
                 {
-                    throw new NotSupportedException(string.Format("Invalid NSP Header; Wanted 'PFS0' got '{0}'", magic.AsString()));
+                    throw new NotSupportedException("Invalid NSP header; Wanted 'PFS0' got " + magic.AsString());
                 }
 
                 for (var i = 0; i < fileCount; i++)
@@ -65,9 +64,9 @@ namespace AluminumFoil.NSP
 
             reader.BaseStream.Seek(0x10 + FileEntryLen * fileNum, SeekOrigin.Begin);
 
-            file.Offset = BitConverter.ToUInt64(reader.ReadBytes(0x8), 0);
-            file.Size = BitConverter.ToUInt64(reader.ReadBytes(0x8), 0);
-            uint nameOffset = BitConverter.ToUInt32(reader.ReadBytes(0x4), 0);
+            file.Offset = reader.ReadUInt64();
+            file.Size = reader.ReadUInt64();
+            uint nameOffset = reader.ReadUInt32();
 
             uint nameLen = 0;
 
@@ -76,7 +75,6 @@ namespace AluminumFoil.NSP
                 nameLen++;
             }
 
-            file.Name = StringTable.SubArray((int)nameOffset, (int)nameLen).AsString();
             file.Name = StringTable.SubArray((int)nameOffset, (int)nameLen).AsString();
 
             var s = file.Size;
@@ -90,7 +88,7 @@ namespace AluminumFoil.NSP
 
             return file;
         }
-
+         
         // TODO read chunksize from config
         public IEnumerable<byte[]> ReadFile(int ind, int ChunkSize = 0x100000)
             // Generator to read file from NSP
@@ -117,33 +115,5 @@ namespace AluminumFoil.NSP
                 }
             }
         }
-    }
-
-    // TODO Can this be watched for changes without inheriting from ReactiveUI
-    // and calling Notify events? It would be nice to have the PFS0 file not
-    // using reactiveui and have the viewmodel take care of everything.
-    public class PFS0File : INotifyPropertyChanged
-    {
-        public string Name { get; set; }    // Name of content eg 123456789.nca
-        public ulong Offset { get; set; }   // Start of file in nsp counting from byte-0x0
-        public ulong Size { get; set; }     // Size of the file in bytes
-        private ulong _Transferred;
-        public ulong Transferred {
-            get => _Transferred;
-            set
-            {
-                _Transferred = value;
-                NotifyPropertyChanged("Transferred");
-            }
-        }
-
-        public string HumanSize { get; set; }
-        public bool Finished { get; set; }
-
-        private void NotifyPropertyChanged(string propName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
