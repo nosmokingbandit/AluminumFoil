@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="AluminumFoil.Windows.exe" version="1.0.0.5" publicKeyToken="016f89ee728b97fc" language="neutral" processorArchitecture="x86" type="win32" />
+  <description asmv2:iconFile="icon.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="AluminumFoil.Windows" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
+    <commandLine file="AluminumFoil.Windows.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC Manifest Options
+          If you want to change the Windows User Account Control level replace the 
+          requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         If you want to utilize File and Registry Virtualization for backward 
+         compatibility then delete the requestedExecutionLevel node.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AluminumFoil.Windows.exe" size="2761704">
+      <assemblyIdentity name="AluminumFoil.Windows" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>9HAfN0zOfMXvAHq4mwu2VEJxphNdnWE9zSGoch4K/z4=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LibUsbDotNet.dll" size="52736">
+      <assemblyIdentity name="LibUsbDotNet" version="3.0.0.0" publicKeyToken="C677239ABE1E02A9" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>dKRRb3J0tPOJtDEHFI8+qdL7YLdNct/vUc10WjBrF8w=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Memory.dll" size="148624">
+      <assemblyIdentity name="System.Memory" version="4.0.1.0" publicKeyToken="CC7B13FFCD2DDD51" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>Y8yndKIx7S98qIi0tsbSNXy0hIqjBAsvDmdDAVjCHtI=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="AluminumFoil.Windows.exe.config" size="19058">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>WTWRSr0aLned21c5irntropTmIkBQDRyCo0yq0aAwZs=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="icon.ico" size="28053">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>z1aWiVGtEkXVO6VzUHjRS0EO9VW+rkJ+cwELHDmdc6M=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=DESKTOP-BBDFA7K\Steven" issuerKeyHash="f74f1dca517064e7840885e25cb0d70491260d4b" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>D5wkW1p2oCdTyd816a/TJSUrREL1H51ffLz3Edas3oM=</DigestValue></Reference></SignedInfo><SignatureValue>DdnlXFXF265CPJ3HlSaRpmurYVv6twHuh8VtlHqwgtoPhuA83Y4anZ1RdXdni165VoeUoEcX1mCa1HfvGK1JUC5lCQy+maJlL3AiAnXSX0bOD2Tq/e8aDu6Lm21/F1Q3qH2j9H4jEQLDUn1fO+qfz0ZS+K685yrr3vJEcnxWuZg=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>wFckrlefDIBeHe0s6vEQMGwBgQWzQEOqqvoTYFB+ebj5x2EEEJ1dJ9v3PhJzm7HIQ/tybhn1r0WcANI36orQTtxku7Kt3w1440TzJjFYpjgfBCZh6RjLXAfsKPRhA2sJ2gMaLRpwa+82/GT+sm1IZHXcKb2rzVhG4r2tDgEmhXk=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="83deacd611f7bc7c5f9d1ff542442b2525d3afe935dfc95327a0765a5b249c0f" Description="" Url=""><as:assemblyIdentity name="AluminumFoil.Windows.exe" version="1.0.0.5" publicKeyToken="016f89ee728b97fc" language="neutral" processorArchitecture="x86" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=DESKTOP-BBDFA7K\Steven</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>0LiNLINxInvK+Sbm8flae1bmKggElJd7AQle0AWPNJ8=</DigestValue></Reference></SignedInfo><SignatureValue>c5xzBD5PBatdnfW+DB/jLH/ZixI4KhszlRfMopyqYhd2ao21IiDaXdTqRisPnsqv8DWTkW/UNaKQebjPgPGkC5FTIu/Qh97RbbFASLabxN3U/5p1TEu2VWvATGGA9oV7KP2mNmpQ+7lo7+oIGhxvfkAytaSw1y88Pmpxoi3N4DU=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>wFckrlefDIBeHe0s6vEQMGwBgQWzQEOqqvoTYFB+ebj5x2EEEJ1dJ9v3PhJzm7HIQ/tybhn1r0WcANI36orQTtxku7Kt3w1440TzJjFYpjgfBCZh6RjLXAfsKPRhA2sJ2gMaLRpwa+82/GT+sm1IZHXcKb2rzVhG4r2tDgEmhXk=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB8TCCAVqgAwIBAgIQfyZ4h4nN7JVPDIomy7rz5jANBgkqhkiG9w0BAQsFADA3MTUwMwYDVQQDHiwARABFAFMASwBUAE8AUAAtAEIAQgBEAEYAQQA3AEsAXABTAHQAZQB2AGUAbjAeFw0xOTAyMjgyMTI4MjFaFw0yMDAyMjkwMzI4MjFaMDcxNTAzBgNVBAMeLABEAEUAUwBLAFQATwBQAC0AQgBCAEQARgBBADcASwBcAFMAdABlAHYAZQBuMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDAVySuV58MgF4d7Szq8RAwbAGBBbNAQ6qq+hNgUH55uPnHYQQQnV0n2/c+EnObschD+3JuGfWvRZwA0jfqitBO3GS7sq3fDXjjRPMmMVimOB8EJmHpGMtcB+wo9GEDawnaAxotGnBr7zb8ZP6ybUhkddwpvavNWEbiva0OASaFeQIDAQABMA0GCSqGSIb3DQEBCwUAA4GBACd0pJNs+vNlvipidJp9aO0eYL+OGt3SvwHSyO0VizxGWN4/5nH9/X6HokdKKN6b5V+WLHijgiqTUvqVuoVKJFZzkntA7Ne5IV28+Zd67p1DbArmQj3c+w9xm49yqPt8deAaAJuJqmB5xqkAqj6wbBTkls8b/galMux0j7L+/Dhr</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

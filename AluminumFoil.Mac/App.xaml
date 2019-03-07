@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Application xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:AluminumFoil.Mac">
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <StyleInclude Source="resm:Avalonia.Themes.Default.DefaultTheme.xaml?assembly=Avalonia.Themes.Default" />
+        <StyleInclude Source="resm:Avalonia.Themes.Default.Accents.BaseLight.xaml?assembly=Avalonia.Themes.Default" />
+        
+        <!--
+        Blue    #2196F3
+        
+        Lt Gray #EEEEEE
+        Md Gray #9E9E9E
+        Dk Gray #424242
+        -->
+        
+        <Style Selector="Button">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      Background="#EEEEEE"
+                                      BorderBrush="#2196F3" 
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      CornerRadius="2"
+                                      Content="{TemplateBinding Content}"
+                                      Padding="6"
+                                      TextBlock.Foreground="{TemplateBinding Foreground}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalContentAlignment="Center" />
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button:pointerover /template/ ContentPresenter">
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
+        </Style>
+        <Style Selector="Button:pressed  /template/ ContentPresenter">
+            <Setter Property="Background" Value="#9E9E9E" />
+        </Style>
+        <Style Selector="Button:disabled">
+            <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}" />
+        </Style>
+        
+        <Style Selector="TextBox">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="#9E9E9E"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="2">
+                        
+                        <DockPanel Margin="6">
+
+                            <TextBlock Name="floatingWatermark"
+                               Foreground="{DynamicResource ThemeAccentBrush}"
+                               FontSize="{DynamicResource FontSizeSmall}"
+                               Text="{TemplateBinding Watermark}"
+                               DockPanel.Dock="Top">
+                                
+                                <TextBlock.IsVisible>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                           Path="UseFloatingWatermark"/>
+                                        <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                           Path="Text"
+                                           Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
+                                    </MultiBinding>
+                                </TextBlock.IsVisible>
+                            </TextBlock>
+
+                            <DataValidationErrors>
+                                <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                              VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+
+                                    <Panel>
+                                        <TextBlock Name="watermark"
+                                                   Opacity="0.5"
+                                                   Text="{TemplateBinding Watermark}"
+                                                   IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"/>
+                                        <TextPresenter Name="PART_TextPresenter"
+                                                       Text="{TemplateBinding Text, Mode=TwoWay}"
+                                                       CaretIndex="{TemplateBinding CaretIndex}"
+                                                       SelectionStart="{TemplateBinding SelectionStart}"
+                                                       SelectionEnd="{TemplateBinding SelectionEnd}"
+                                                       TextAlignment="{TemplateBinding TextAlignment}"
+                                                       TextWrapping="{TemplateBinding TextWrapping}"
+                                                       PasswordChar="{TemplateBinding PasswordChar}"/>
+                                    </Panel>
+                                </ScrollViewer>
+                            </DataValidationErrors>
+                        </DockPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="TextBox:pointerover /template/ Border#border">
+            <Setter Property="BorderBrush" Value="#9E9E9E"/>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#border">
+            <Setter Property="BorderBrush" Value="#9E9E9E"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Cursor" Value="Arrow" />
+        </Style>
+    </Application.Styles>
+</Application>

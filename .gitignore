@@ -11,6 +11,12 @@ packages/
 AluminumFoil/bin/
 AluminumFoil/obj/
 
+AluminumFoil.Mac/bin/
+AluminumFoil.Mac/obj/
+
+AluminumFoil.Windows/bin/
+AluminumFoil.Windows/obj/
+
 # Test binary, build with `go test -c`
 *.test
 

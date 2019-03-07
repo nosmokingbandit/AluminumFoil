@@ -1,0 +1,96 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="**\*.xaml.cs">
+      <DependentUpon>Success.xaml</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="**\*.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+    <EmbeddedResource Remove="Assets\MacStyle.xaml" />
+    <EmbeddedResource Remove="Assets\MacStyle.xaml" />
+    <EmbeddedResource Remove="Assets\MacStyle.xaml" />
+    <EmbeddedResource Remove="Assets\MacStyle.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Assets\Images\close_24.png" />
+    <None Remove="Assets\Images\error_24.png" />
+    <None Remove="Assets\Images\error_32.png" />
+    <None Remove="Assets\Images\error_64.png" />
+    <None Remove="Assets\Images\error_96.png" />
+    <None Remove="Assets\Images\finished_24.png" />
+    <None Remove="Assets\Images\finished_32.png" />
+    <None Remove="Assets\Images\finished_64.png" />
+    <None Remove="Assets\Images\finished_96.png" />
+    <None Remove="Assets\Images\Icon.png" />
+    <None Remove="Assets\Images\idle_24.png" />
+    <None Remove="Assets\Images\idle_32.png" />
+    <None Remove="Assets\Images\idle_64.png" />
+    <None Remove="Assets\Images\idle_96.png" />
+    <None Remove="Assets\Images\installing_24.png" />
+    <None Remove="Assets\Images\installing_32.png" />
+    <None Remove="Assets\Images\installing_64.png" />
+    <None Remove="Assets\Images\installing_96.png" />
+    <None Remove="Assets\Images\waiting_24.png" />
+    <None Remove="Assets\Images\waiting_32.png" />
+    <None Remove="Assets\Images\waiting_64.png" />
+    <None Remove="Assets\Images\waiting_96.png" />
+    <None Remove="Assets\Images\warning_24.png" />
+    <None Remove="Assets\Images\warning_32.png" />
+    <None Remove="Assets\Images\warning_64.png" />
+    <None Remove="Assets\Images\warning_96.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Images\close_24.png" />
+    <EmbeddedResource Include="Assets\Images\error_24.png" />
+    <EmbeddedResource Include="Assets\Images\error_32.png" />
+    <EmbeddedResource Include="Assets\Images\error_64.png" />
+    <EmbeddedResource Include="Assets\Images\error_96.png" />
+    <EmbeddedResource Include="Assets\Images\finished_24.png" />
+    <EmbeddedResource Include="Assets\Images\finished_32.png" />
+    <EmbeddedResource Include="Assets\Images\finished_64.png" />
+    <EmbeddedResource Include="Assets\Images\finished_96.png" />
+    <EmbeddedResource Include="Assets\Images\Icon.png" />
+    <EmbeddedResource Include="Assets\Images\idle_24.png" />
+    <EmbeddedResource Include="Assets\Images\idle_32.png" />
+    <EmbeddedResource Include="Assets\Images\idle_64.png" />
+    <EmbeddedResource Include="Assets\Images\idle_96.png" />
+    <EmbeddedResource Include="Assets\Images\installing_24.png" />
+    <EmbeddedResource Include="Assets\Images\installing_32.png" />
+    <EmbeddedResource Include="Assets\Images\installing_64.png" />
+    <EmbeddedResource Include="Assets\Images\installing_96.png" />
+    <EmbeddedResource Include="Assets\Images\waiting_24.png" />
+    <EmbeddedResource Include="Assets\Images\waiting_32.png" />
+    <EmbeddedResource Include="Assets\Images\waiting_64.png" />
+    <EmbeddedResource Include="Assets\Images\waiting_96.png" />
+    <EmbeddedResource Include="Assets\Images\warning_24.png" />
+    <EmbeddedResource Include="Assets\Images\warning_32.png" />
+    <EmbeddedResource Include="Assets\Images\warning_64.png" />
+    <EmbeddedResource Include="Assets\Images\warning_96.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AluminumFoil\AluminumFoil.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dialogs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.7.1-cibuild0001610-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.7.1-cibuild0001610-beta" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.7.1-cibuild0001610-beta" />
+  </ItemGroup>
+</Project>

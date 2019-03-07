@@ -2,17 +2,17 @@ using System;
 using System.Threading.Tasks;
 using ReactiveUI;
 using System.Reactive;
-using Microsoft.Win32;
+using Avalonia.Controls;
+using System.Collections.Generic;
 
-namespace AluminumFoil.ViewModels
+namespace AluminumFoil.Mac.ViewModels
 {
     public class MainWindow : ReactiveObject
     {
         public MainWindow()
         {
             InstallNSP = ReactiveCommand.Create(() => _InstallNSP(), this.WhenAnyValue(vm => vm.OpenedNSP, vm => vm.AllowActions, (a, b) => a != null && b));
-            OpenNSP = ReactiveCommand.Create(() => _OpenNSP(), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b ));
-            CloseNSP = ReactiveCommand.Create(() => _CloseNSP(), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b));
+            OpenNSP = ReactiveCommand.Create(() => _OpenNSP(), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b));
         }
 
         private string _StatusBar = "Idle";
@@ -46,20 +46,20 @@ namespace AluminumFoil.ViewModels
             }
         }
 
-        private string _StatusBarIcon = "/AluminumFoil.Windows;component/Assets/Images/idle_24.png";
+        private string _StatusBarIcon = "resm:AluminumFoil.Mac.Assets.Images.idle_24.png";
         public string StatusBarIcon
         {
             get => _StatusBarIcon;
             set
             {
-                this.RaiseAndSetIfChanged(ref _StatusBarIcon, string.Format("/AluminumFoil.Windows;component/Assets/Images/{0}_24.png", value));
+                this.RaiseAndSetIfChanged(ref _StatusBarIcon, string.Format("resm:AluminumFoil.Mac.Assets.Images.{0}_24.png", value));
             }
         }
-        
+
         private AluminumFoil.NSP.PFS0 _OpenedNSP;
         public AluminumFoil.NSP.PFS0 OpenedNSP
         {
-            get => _OpenedNSP;
+            get => _OpenedNSP; 
             set
             {
                 this.RaiseAndSetIfChanged(ref _OpenedNSP, value);
@@ -70,25 +70,27 @@ namespace AluminumFoil.ViewModels
         //======== Button Commands
         //
         public ReactiveCommand<Unit, Unit> OpenNSP { get; set; }
-        private void _OpenNSP()
+        private async void _OpenNSP()
         {
             var dlg = new OpenFileDialog();
-            dlg.Multiselect = false;
-            dlg.Filter = "Switch eShop Files (*.nsp)|*.nsp";
+            dlg.AllowMultiple = false;
+            dlg.Filters.Add(new FileDialogFilter { Name = "Switch eShop Files (*.nsp)", Extensions = new List<string> { "nsp" } });
+            string[] selectedFiles = await dlg.ShowAsync(App.Current.MainWindow);
 
-            if(dlg.ShowDialog() == false){
+            if (selectedFiles.Length == 0)
+            {
                 return;
             }
 
             try
             {
-                OpenedNSP = new AluminumFoil.NSP.PFS0(dlg.FileName);
-            } 
+                OpenedNSP = new AluminumFoil.NSP.PFS0(System.Uri.UnescapeDataString(selectedFiles[0]));
+            }
             catch (Exception e)
             {
-                OpenedNSP = null;
                 var errDlg = new Dialogs.Error("Corrupt NSP", e.Message);
-                errDlg.ShowDialog();
+                await errDlg.ShowDialog(App.Current.MainWindow);
+                // OpenedNSP = null;
                 return;
             }
             finally
@@ -96,12 +98,6 @@ namespace AluminumFoil.ViewModels
                 StatusBar = "Idle";
                 StatusBarIcon = "idle";
             }
-        }
-
-        public ReactiveCommand<Unit, Unit> CloseNSP { get; set; }
-        private void _CloseNSP()
-        {
-            OpenedNSP = null;
         }
 
         public ReactiveCommand<Unit, Unit> InstallNSP { get; set; }
@@ -112,19 +108,19 @@ namespace AluminumFoil.ViewModels
             {
                 await Task.Run(() =>
                 {
-                    foreach (Tuple<string, string> statusUpdate in AluminumFoil.Windows.App.GoldLeaf.InstallNSP(OpenedNSP))
+                    foreach (Tuple<string, string> statusUpdate in AluminumFoil.Mac.App.GoldLeaf.InstallNSP(OpenedNSP))
                     {
                         StatusBar = statusUpdate.Item1;
                         StatusBarIcon = statusUpdate.Item2;
                     }
                 });
                 var finDlg = new Dialogs.Success("Installation Finished", OpenedNSP.BaseName + " Installation Finished");
-                finDlg.ShowDialog();
+                await finDlg.ShowDialog(App.Current.MainWindow);
             }
             catch (Exception e)
             {
                 var errDlg = new Dialogs.Error("Installation Failed", e.Message);
-                errDlg.ShowDialog();
+                await errDlg.ShowDialog(App.Current.MainWindow);
             }
             finally
             {

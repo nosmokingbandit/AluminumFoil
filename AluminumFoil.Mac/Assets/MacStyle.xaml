@@ -1,0 +1,40 @@
+﻿
+<Style xmlns="https://github.com/avaloniaui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <Style.Resources>
+            <Color x:Key="ThemeAccentColor">#CC119EDA</Color>
+            <Color x:Key="aqua">#007AFF</Color>
+        
+    </Style.Resources>
+
+            <Style Selector="Button">
+                <Setter Property="BorderBrush" Value="{DynamicResource aqua}"/>>
+                <Setter Property="Template">
+                    <ControlTemplate>
+                        <ContentPresenter Name="PART_ContentPresenter"
+                                          Background="{TemplateBinding Background}"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          CornerRadius="2"
+                                          Content="{TemplateBinding Content}"
+                                          Padding="{TemplateBinding Padding}"
+                                          TextBlock.Foreground="{TemplateBinding Foreground}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </ControlTemplate>
+                </Setter>
+            </Style>
+
+        <Style Selector="Button:pointerover /template/ ContentPresenter">
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
+        </Style>
+        <Style Selector="Button:pressed  /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ThemeControlHighBrush}" />
+        </Style>
+        <Style Selector="Button:disabled">
+            <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}" />
+        </Style>
+
+</Style>

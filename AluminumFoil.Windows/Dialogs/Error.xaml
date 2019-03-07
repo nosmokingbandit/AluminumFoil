@@ -13,7 +13,7 @@
         >
     <StackPanel Orientation="Vertical" Margin="10">
         <StackPanel Orientation="Horizontal">
-                <Image Source="/AluminumFoil;component/Assets/Images/error_96.png" Height="96"></Image>
+            <Image Source="/AluminumFoil.Windows;component/Assets/Images/error_96.png" Height="96"></Image>
             <StackPanel Orientation="Vertical">
                 <Label Content="{Binding Title}" FontWeight="Bold"></Label>
                 <Label Width="180">

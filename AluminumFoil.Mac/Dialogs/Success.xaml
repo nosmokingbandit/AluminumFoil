@@ -1,0 +1,18 @@
+﻿<Window x:Class="AluminumFoil.Mac.Dialogs.Success"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding Title}"
+        >
+
+    <StackPanel Orientation="Vertical" Margin="10,0,10,10" x:Name="MainPanel">
+        <StackPanel Orientation="Horizontal">
+            <Image Source="resm:AluminumFoil.Mac.Assets.Images.finished_96.png" Height="96" VerticalAlignment="Center"></Image>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
+                <TextBlock Width="180" TextWrapping="1" Text="{Binding Message}"/>
+            </StackPanel>
+        </StackPanel>
+        <Button Click="HandleClose" Padding="5">Close</Button>
+    </StackPanel>
+
+</Window>

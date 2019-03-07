@@ -179,6 +179,7 @@ namespace GoldLeaf
                             break;
                         default:
                             yield return new InstallUpdate(string.Format("Unknown request from GoldLeaf: {0}", resp.AsString()), "alert");
+                            finished = true;
                             break;
                     }
                 }
