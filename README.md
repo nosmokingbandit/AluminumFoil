@@ -2,7 +2,7 @@
 Standalone GUI USB installer for GoldLeaf
 
 ![Screenshot](https://raw.githubusercontent.com/nosmokingbandit/AluminumFoil/master/Screenshots/Capture.PNG)
-
+![Screenshot](https://raw.githubusercontent.com/nosmokingbandit/AluminumFoil/master/Screenshots/MacCapture.png)
 ## Usage
 
 #### First run setup
