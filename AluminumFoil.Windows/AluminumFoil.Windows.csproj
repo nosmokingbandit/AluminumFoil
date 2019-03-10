@@ -28,7 +28,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationRevision>9</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -206,9 +206,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Costura32\libusb-1.0.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Images\close_24.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\error_24.png" />

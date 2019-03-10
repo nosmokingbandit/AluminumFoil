@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using System;
 using ExtensionMethods;
@@ -15,7 +15,7 @@ namespace TinFoil
 
         private enum CommandIDs : uint { Exit = 0, FileRange = 1, Response = 1 };
 
-        private const int ChunkSize = 0x800000;
+        private const int ChunkSize = 0x100000;
 
         private byte[] ResponseHeader(uint cmdId, ulong size)
         {
@@ -65,21 +65,20 @@ namespace TinFoil
                     else if (cmdID == (uint)CommandIDs.FileRange)
                     {
                         // File Range Command
-                        byte[] rangeCommand = NX.Read(0x20);
+                        byte[] fileRangeRequest = NX.Read(0x20);
 
-                        ulong size = BitConverter.ToUInt64(rangeCommand, 0x0);
-                        ulong offset = BitConverter.ToUInt64(rangeCommand, 0x8);
-                        ulong nameLen = BitConverter.ToUInt64(rangeCommand, 0x10);
+                        ulong size = BitConverter.ToUInt64(fileRangeRequest, 0x0);
+                        ulong offset = BitConverter.ToUInt64(fileRangeRequest, 0x8);
+                        ulong nameLen = BitConverter.ToUInt64(fileRangeRequest, 0x10);
 
                         string nspName = BitConverter.ToString(NX.Read(Convert.ToInt32(nameLen)));
 
-                        yield return new InstallUpdate(string.Format("Transferring {0} requested bytes to TinFoil", size), "waiting");
+                        yield return new InstallUpdate(string.Format("Transferring {0} requested bytes to TinFoil", size), "installing");
 
                         NX.Write(ResponseHeader((uint)CommandIDs.FileRange, size));
 
                         using (BinaryReader fileReader = new BinaryReader(new FileStream(nsp.FilePath, FileMode.Open)))
                         {
-
                             fileReader.BaseStream.Seek((long)offset, SeekOrigin.Begin);
 
                             ulong bytesRead = 0;

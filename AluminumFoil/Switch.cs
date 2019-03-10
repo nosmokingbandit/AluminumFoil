@@ -13,7 +13,7 @@ namespace AluminumFoil
         private const int VID = 0x057E;
         private const int PID = 0x3000;
         private const int TIMEOUT = 0;
-        private UsbContext context;
+        private UsbContext LibUsbContext;
         private IUsbDevice NX;
         private UsbEndpointWriter Writer;
         private UsbEndpointReader Reader;
@@ -33,15 +33,14 @@ namespace AluminumFoil
 
         public void Dispose()
         {
-            this.context.Dispose();
-            this.NX.Dispose();
-            throw new NotImplementedException();
+            LibUsbContext.Dispose();
+            NX.Dispose();
         }
 
         public Switch()
         {
-            this.context = new UsbContext();
-            var usbDeviceCollection = context.List();
+            this.LibUsbContext = new UsbContext();
+            var usbDeviceCollection = LibUsbContext.List();
             NX = usbDeviceCollection.FirstOrDefault(d => d.ProductId == PID && d.VendorId == VID);
 
             if (NX == null)
