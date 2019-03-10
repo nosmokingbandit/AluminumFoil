@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-
+using System.Windows.Controls;
 namespace AluminumFoil.Windows
 {
     public partial class MainWindow : Window

@@ -4,19 +4,12 @@ using System;
 using ExtensionMethods;
 using System.IO;
 
-using LibUsbDotNet.LibUsb;
-using LibUsbDotNet.Main;
-
 namespace GoldLeaf
 {
     using InstallUpdate = Tuple<string, string>;
 
     public class GoldLeaf
     {
-        private const int VID = 0x057E;
-        private const int PID = 0x3000;
-        private const int TIMEOUT = 0;
-
         private readonly Dictionary<string, byte[]> commandHeaders = new Dictionary<string, byte[]>()
         {                                      // G   L   U   C  #ID
             { "ConnectionRequest",   new byte[]{ 71, 76, 85, 67, 0, 0, 0, 0 } },
@@ -41,46 +34,20 @@ namespace GoldLeaf
             return "";
         }
 
-        private int Write(UsbEndpointWriter Writer, byte[] payload)
-        {
-            Writer.Write(payload, TIMEOUT, out int txLen);
-            return txLen;
-        }
-
-        private byte[] Read(UsbEndpointReader Reader, int ReadLen)
-        {
-            var readBuffer = new byte[ReadLen];
-            Reader.Read(readBuffer, TIMEOUT, out int txLen);
-            return readBuffer;
-        }
-
         public IEnumerable<Tuple<string, string>> InstallNSP(AluminumFoil.NSP.PFS0 nsp)
         {
+            Console.WriteLine("INSTALLING TO GoldLeaf");
             // Installs NSP to Switch via GoldLeaf
             int txLen;
 
-            using (UsbContext context = new UsbContext())
+            using (AluminumFoil.Switch NX = new AluminumFoil.Switch())
             {
-                var usbDeviceCollection = context.List();
-                IUsbDevice NX = usbDeviceCollection.FirstOrDefault(d => d.ProductId == PID && d.VendorId == VID);
-
-                if (NX == null)
-                {
-                    throw new Exception("Unable to find Switch. Ensure Switch is connected and GoldLeaf's USB Install is open.");
-                }
-
-                NX.Open();
-                NX.ClaimInterface(NX.Configs[0].Interfaces[0].Number);
-
-                var Writer = NX.OpenEndpointWriter(WriteEndpointID.Ep01);
-                var Reader = NX.OpenEndpointReader(ReadEndpointID.Ep01);
-
-                Write(Writer, commandHeaders["ConnectionRequest"]);
+                NX.Write(commandHeaders["ConnectionRequest"]);
 
                 bool finished = false;
                 while (!finished)
                 {
-                    byte[] resp = Read(Reader, 0x8);
+                    byte[] resp = NX.Read(0x8);
 
                     string CommandName = RespType(resp);
 
@@ -88,12 +55,12 @@ namespace GoldLeaf
                     {
                         case "ConnectionResponse":
                             yield return new InstallUpdate("Sending NSP name to GoldLeaf", "installing");
-                            Write(Writer, commandHeaders["NSPName"]);
+                            NX.Write(commandHeaders["NSPName"]);
 
                             var nameBytes = nsp.BaseName.AsBytes();
 
-                            Write(Writer, BitConverter.GetBytes(Convert.ToUInt32(nameBytes.Length)));
-                            Write(Writer, nameBytes);
+                            NX.Write(BitConverter.GetBytes(Convert.ToUInt32(nameBytes.Length)));
+                            NX.Write(nameBytes);
 
                             yield return new InstallUpdate("Confirm Installation Options on GoldLeaf", "waiting");
 
@@ -102,28 +69,28 @@ namespace GoldLeaf
                         case "Start":
                             yield return new InstallUpdate("Sending NSP Metadata", "installing");
 
-                            Write(Writer, commandHeaders["NSPData"]);
-                            Write(Writer, BitConverter.GetBytes(Convert.ToUInt32(nsp.Contents.Count)));
+                            NX.Write(commandHeaders["NSPData"]);
+                            NX.Write(BitConverter.GetBytes(Convert.ToUInt32(nsp.Contents.Count)));
 
                             foreach (var file in nsp.Contents)
                             {
                                 // uint [4] Name len 
-                                Write(Writer, BitConverter.GetBytes(Convert.ToUInt32(file.Name.Length)));
+                                NX.Write(BitConverter.GetBytes(Convert.ToUInt32(file.Name.Length)));
 
                                 // str [*] Name
-                                Write(Writer, file.Name.AsBytes());
+                                NX.Write(file.Name.AsBytes());
 
                                 // ulong [8] File offset 
-                                Write(Writer, BitConverter.GetBytes(file.Offset));
+                                NX.Write(BitConverter.GetBytes(file.Offset));
 
                                 // ulong [8] File size
-                                Write(Writer, BitConverter.GetBytes(file.Size));
+                                NX.Write(BitConverter.GetBytes(file.Size));
                             }
 
                             break;
 
                         case "NSPContent":
-                            byte[] indBytes = Read(Reader, 0x4);
+                            byte[] indBytes = NX.Read(0x4);
 
                             // can only index observablecolleciton with int, which is kind of dumb...
                             var idx = (int)BitConverter.ToUInt32(indBytes, 0);
@@ -132,7 +99,7 @@ namespace GoldLeaf
 
                             foreach (var chunk in nsp.ReadFile(idx))
                             {
-                                txLen = Write(Writer, chunk);
+                                txLen = NX.Write(chunk);
                                 nsp.Contents[idx].Transferred += Convert.ToUInt64(chunk.Length);
                             }
 
@@ -169,7 +136,7 @@ namespace GoldLeaf
                                 reader.Read(ticketFile, 0, ticketFile.Length);
                             }
 
-                            Write(Writer, ticketFile);
+                            NX.Write(ticketFile);
 
                             break;
 
@@ -183,7 +150,6 @@ namespace GoldLeaf
                             break;
                     }
                 }
-                NX.Dispose();
             }
         }
     }

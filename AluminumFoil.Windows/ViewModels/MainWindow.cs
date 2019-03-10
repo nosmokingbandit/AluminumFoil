@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ReactiveUI;
 using System.Reactive;
 using Microsoft.Win32;
+using System.Collections.Generic;
 
 namespace AluminumFoil.ViewModels
 {
@@ -13,6 +14,26 @@ namespace AluminumFoil.ViewModels
             InstallNSP = ReactiveCommand.Create(() => _InstallNSP(), this.WhenAnyValue(vm => vm.OpenedNSP, vm => vm.AllowActions, (a, b) => a != null && b));
             OpenNSP = ReactiveCommand.Create(() => _OpenNSP(), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b ));
             CloseNSP = ReactiveCommand.Create(() => _CloseNSP(), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b));
+        }
+
+        private string _NSPBasename = "";
+        public string NSPBasename
+        {
+            get => _NSPBasename;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _NSPBasename, value);
+            }
+        }
+
+        private string _InstallationTarget = "GoldLeaf";
+        public string InstallationTarget
+        {
+            get => _InstallationTarget;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _InstallationTarget, value);
+            }
         }
 
         private string _StatusBar = "Idle";
@@ -63,6 +84,7 @@ namespace AluminumFoil.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _OpenedNSP, value);
+                NSPBasename = value.BaseName;
             }
         }
 
@@ -112,7 +134,23 @@ namespace AluminumFoil.ViewModels
             {
                 await Task.Run(() =>
                 {
-                    foreach (Tuple<string, string> statusUpdate in AluminumFoil.Windows.App.GoldLeaf.InstallNSP(OpenedNSP))
+                    Func<NSP.PFS0, IEnumerable<Tuple<string, string>>> installer = null;
+                    switch (InstallationTarget)
+                    {
+                        case "GoldLeaf":
+                            installer = Windows.App.GoldLeaf.InstallNSP;
+                            break;
+                        case "TinFoil":
+                            installer = Windows.App.TinFoil.InstallNSP;
+                            break;
+                    }
+
+                    if (installer == null)
+                    {
+                        return;
+                    };
+
+                    foreach (Tuple<string, string> statusUpdate in installer(OpenedNSP))
                     {
                         StatusBar = statusUpdate.Item1;
                         StatusBarIcon = statusUpdate.Item2;

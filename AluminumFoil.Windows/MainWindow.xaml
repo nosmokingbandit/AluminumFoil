@@ -14,6 +14,7 @@
     <Window.Resources>
         <converters:NCAFilter x:Key="NCAFilter"/>
         <converters:VisibleIfExists x:Key="VisibleIfExists"/>
+        <converters:VisibleIfInstallationTarget x:Key="VisibleIfInstallationTarget"/>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="5" />
         </Style>
@@ -23,26 +24,20 @@
         <StackPanel Margin="10">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
+                
                 <Button Grid.Column="0" Padding="5" Command="{Binding OpenNSP}">Open NSP</Button>
-                <TextBox Grid.Column="1" Padding="5" IsReadOnly="True" Text="{Binding OpenedNSP.FilePath}" VerticalAlignment="Center">
-                </TextBox>
-                <Button Grid.Column="1" Width="24" Height="24" Margin="0,0,2,0" BorderThickness="0" HorizontalAlignment="Right" Command="{Binding CloseNSP}">
-                    <Image Source="/AluminumFoil.Windows;component/Assets/Images/close_24.png"></Image>
-                    <Button.Background>
-                        <LinearGradientBrush StartPoint="0,1" EndPoint="1,1">
-                            <GradientStop Color="Transparent" Offset="0.0" />
-                            <GradientStop Color="White" Offset="0.5" />
-                        </LinearGradientBrush>
-                    </Button.Background>
 
-                </Button>
+                <ComboBox x:Name="cbTarget" Grid.Column="1" Padding="5" Margin="10,0,0,0" IsEnabled="{Binding AllowActions}" Text="{Binding InstallationTarget}">
+                    <ComboBoxItem IsSelected="True">GoldLeaf</ComboBoxItem>
+                    <ComboBoxItem>TinFoil</ComboBoxItem>
+                </ComboBox>
             </Grid>
 
             <StackPanel Orientation="Vertical" Visibility="{Binding OpenedNSP, Converter={StaticResource VisibleIfExists}}">
-                <GroupBox Header=" Contents " Margin="0,5,0,0">
+                <GroupBox Header="{Binding NSPBasename}" Margin="0,5,0,0" Visibility="{Binding InstallationTarget, Converter={StaticResource VisibleIfInstallationTarget}, ConverterParameter='GoldLeaf'}">
                     <ItemsControl ItemsSource="{Binding OpenedNSP.Contents, Converter={StaticResource NCAFilter}}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -57,6 +52,14 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </GroupBox>
+
+                <StackPanel Orientation="Vertical" Margin="10" Visibility="{Binding InstallationTarget, Converter={StaticResource VisibleIfInstallationTarget}, ConverterParameter='TinFoil'}">
+                    <Grid>
+                        <TextBlock Text="{Binding OpenedNSP.BaseName}"></TextBlock>
+                        <TextBlock Text="{Binding OpenedNSP.HumanSize}" HorizontalAlignment="Right"></TextBlock>
+                    </Grid>
+                    <ProgressBar MinHeight="4" Maximum="{Binding OpenedNSP.Size}" Value="{Binding OpenedNSP.Transferred}"></ProgressBar>
+                </StackPanel>
 
                 <Button Command="{Binding InstallNSP}" Margin="0,10,0,0">Install</Button>
             </StackPanel>

@@ -22,4 +22,22 @@ namespace ExtensionMethods
             return Encoding.ASCII.GetBytes(data);
         }
     }
+
+    public static class UIint64Extensions
+    {
+
+        private static readonly string[] Suffixes = new string[] { "B", "KB", "MB", "GB", "TB" };
+
+        public static string HumanSize(this ulong size)
+        {
+            var s = size;
+            var suff = 0;
+            while (s / 1024 > 0)
+            {
+                s /= 1024;
+                suff++;
+            }
+            return s.ToString() + Suffixes[suff];
+        }
+    }
 }

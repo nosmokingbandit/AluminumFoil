@@ -5,23 +5,38 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using ReactiveUI;
 
 namespace AluminumFoil.NSP
 {
-    public class PFS0
+    public class PFS0 : ReactiveObject
     {
 
         public string FilePath { get; set; }
         public ObservableCollection<PFS0File> Contents { get; } = new ObservableCollection<PFS0File>();
+        public string BaseName { get; }
 
-        public readonly string BaseName;
-        public readonly long Size;
+        public string HumanSize { get; set; }
+        private ulong _Size;
+        public ulong Size {
+            get => _Size;
+            set
+            {
+                _Size = value;
+                HumanSize = value.HumanSize();
+            }
+        }
+        private ulong _Transferred;
+        public ulong Transferred {
+            get => _Transferred;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _Transferred, value);
+            }
+        }
 
         private readonly byte[] PFS0MAGIC = new byte[0x4] { 80, 70, 83, 48 }; // "PFS0"
-        private readonly string[] Suffixes = new string[] { "B", "KB", "MB", "GB", "TB" };
-
         private const int FileEntryLen = 0x18;
-
         private readonly long DataOffset;
         private readonly byte[] StringTable;
 
@@ -32,7 +47,7 @@ namespace AluminumFoil.NSP
             FilePath = fp;
             FileInfo fi = new FileInfo(FilePath);
             BaseName = fi.Name;
-            Size = fi.Length;
+            Size = (ulong)fi.Length;
 
             using (BinaryReader reader = new BinaryReader(new FileStream(FilePath, FileMode.Open)))
             {
@@ -76,15 +91,7 @@ namespace AluminumFoil.NSP
             }
 
             file.Name = StringTable.SubArray((int)nameOffset, (int)nameLen).AsString();
-
-            var s = file.Size;
-            var suff = 0;
-            while (s / 1024 > 0)
-            {
-                s /= 1024;
-                suff++;
-            }
-            file.HumanSize = s.ToString() + Suffixes[suff];
+            file.HumanSize = file.Size.HumanSize();
 
             return file;
         }

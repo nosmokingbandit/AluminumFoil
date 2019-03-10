@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="LibUsbDotNet" Version="3.0.48-alpha" />
+    <PackageReference Include="ReactiveUI" Version="10.0.0-preview.3" />
   </ItemGroup>
 
 </Project>
