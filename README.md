@@ -2,10 +2,10 @@
 Standalone GUI USB installer for GoldLeaf
 
 ![Screenshot](https://raw.githubusercontent.com/nosmokingbandit/AluminumFoil/master/Screenshots/Capture.PNG)
-
+![Screenshot](https://raw.githubusercontent.com/nosmokingbandit/AluminumFoil/master/Screenshots/MacCapture.png)
 ## Usage
 
-#### First run setup
+#### Windows first run setup
 
 In order to communicate with your Switch you must first install the libusbk driver. This only needs to be done once and will not affect your ability to send RCM payloads.
 
