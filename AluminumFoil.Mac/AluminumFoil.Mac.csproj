@@ -22,7 +22,6 @@
     <EmbeddedResource Remove="Assets\MacStyle.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Assets\Images\close_24.png" />
     <None Remove="Assets\Images\error_24.png" />
     <None Remove="Assets\Images\error_32.png" />
     <None Remove="Assets\Images\error_64.png" />
@@ -50,7 +49,6 @@
     <None Remove="Assets\Images\warning_96.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\Images\close_24.png" />
     <EmbeddedResource Include="Assets\Images\error_24.png" />
     <EmbeddedResource Include="Assets\Images\error_32.png" />
     <EmbeddedResource Include="Assets\Images\error_64.png" />

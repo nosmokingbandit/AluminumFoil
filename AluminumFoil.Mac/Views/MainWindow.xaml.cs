@@ -21,6 +21,16 @@ namespace AluminumFoil.Mac.Views
             MainPanel = this.Find<StackPanel>("MainPanel");
         }
 
+        private void ChangeInstallationTarget(object sender, object e)
+        {
+            DropDown dd = (DropDown)sender;
+            DropDownItem ddi = (DropDownItem)dd.SelectedItem;
+
+            var dc = (ViewModels.MainWindow)DataContext;
+            dc.InstallationTarget = ddi.Content.ToString();
+        }
+
+
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);

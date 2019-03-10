@@ -16,7 +16,7 @@ namespace AluminumFoil.ViewModels
             CloseNSP = ReactiveCommand.Create(() => _CloseNSP(), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b));
         }
 
-        private string _NSPBasename = "";
+        private string _NSPBasename = ""; // Todo remove this?
         public string NSPBasename
         {
             get => _NSPBasename;
