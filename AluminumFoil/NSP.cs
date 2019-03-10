@@ -14,7 +14,16 @@ namespace AluminumFoil.NSP
 
         public string FilePath { get; set; }
         public ObservableCollection<PFS0File> Contents { get; } = new ObservableCollection<PFS0File>();
-        public string BaseName { get; }
+
+        private string _BaseName;
+        public string BaseName
+        {
+            get => _BaseName;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _BaseName, value);
+            }
+        }
 
         public string HumanSize { get; set; }
         private ulong _Size;

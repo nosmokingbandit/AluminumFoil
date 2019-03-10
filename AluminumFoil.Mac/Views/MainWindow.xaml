@@ -34,7 +34,7 @@
                         IsVisible="{Binding InstallationTarget, Converter={StaticResource Equals}, ConverterParameter='GoldLeaf'}"
                         >
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding NSPBasename}"></TextBlock>
+                        <TextBlock Text="{Binding OpenedNSP.BaseName}" Margin="5" FontSize="13" FontWeight="Bold"></TextBlock>
                         <ItemsControl Items="{Binding OpenedNSP.Contents, Converter={StaticResource NCAFilter}}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>

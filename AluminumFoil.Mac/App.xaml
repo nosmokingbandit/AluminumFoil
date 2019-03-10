@@ -44,5 +44,70 @@
             <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}" />
         </Style>
         
+        
+        <Style Selector="DropDown">
+            <Setter Property="BorderBrush" Value="#2196F3"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="Template">
+              <ControlTemplate>
+                <Border Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="2">
+                  <Grid ColumnDefinitions="*,Auto">
+                    <ContentControl Content="{TemplateBinding SelectionBoxItem}"
+                                    ContentTemplate="{TemplateBinding ItemTemplate}"
+                                    Margin="{TemplateBinding Padding}"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"/>
+                    <ToggleButton Name="toggle"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  ClickMode="Press"
+                                  Focusable="False"
+                                  IsChecked="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
+                                  Grid.Column="1">
+                      <Path Fill="{DynamicResource ThemeForegroundBrush}"
+                            Width="8"
+                            Height="4"
+                            Stretch="Uniform"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z"/>
+                    </ToggleButton>
+                    <Popup Name="PART_Popup"
+                           IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
+                           MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                           MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                           PlacementTarget="{TemplateBinding}"
+                           ObeyScreenEdges="True"
+                           StaysOpen="False">
+                      <Border BorderBrush="{DynamicResource ThemeBorderMidBrush}"
+                              BorderThickness="1">
+                          <AdornerDecorator Margin="-1 -1 0 0">
+                              <ScrollViewer>
+                                  <ItemsPresenter Name="PART_ItemsPresenter"
+                                                  Items="{TemplateBinding Items}"
+                                                  ItemsPanel="{TemplateBinding ItemsPanel}"
+                                                  ItemTemplate="{TemplateBinding ItemTemplate}"
+                                                  MemberSelector="{TemplateBinding MemberSelector}"
+                                                  VirtualizationMode="{TemplateBinding VirtualizationMode}"
+                                          />
+                              </ScrollViewer>
+                          </AdornerDecorator>
+                      </Border>
+                    </Popup>
+                  </Grid>
+                </Border>
+              </ControlTemplate>
+            </Setter>
+          </Style>
+          <Style Selector="DropDown:pointerover /template/ Border#border">
+            <Setter Property="BorderBrush" Value="#2196F3"/>
+          </Style>
+                
+        
     </Application.Styles>
 </Application>
