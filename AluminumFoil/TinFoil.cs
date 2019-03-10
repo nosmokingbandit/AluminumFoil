@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using System;
 using ExtensionMethods;
@@ -31,8 +31,6 @@ namespace TinFoil
         public IEnumerable<Tuple<string, string>> InstallNSP(AluminumFoil.NSP.PFS0 nsp)
         {
             // Installs NSP to Switch via TinFoil
-            Console.WriteLine("INSTALLING TO TINFOIL");
-
             using (AluminumFoil.Switch NX = new AluminumFoil.Switch())
             {
                 // Send NSP List (just one though)

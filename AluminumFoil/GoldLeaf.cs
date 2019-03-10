@@ -36,7 +36,6 @@ namespace GoldLeaf
 
         public IEnumerable<Tuple<string, string>> InstallNSP(AluminumFoil.NSP.PFS0 nsp)
         {
-            Console.WriteLine("INSTALLING TO GoldLeaf");
             // Installs NSP to Switch via GoldLeaf
             int txLen;
 
