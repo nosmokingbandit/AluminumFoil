@@ -7,42 +7,62 @@
     <Window.Resources>
         <converters:BitmapValueConverter x:Key="BitmapValueConverter"/>
         <converters:NCAFilter x:Key="NCAFilter"/>
+        <converters:Equals x:Key="Equals"/>
     </Window.Resources>
     
     <StackPanel x:Name="MainPanel">
         <StackPanel Margin="10">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
                 <Button Grid.Column="0" Padding="5" Margin="0,0,5,0" Command="{Binding OpenNSP}">Open NSP</Button>
-                <TextBox Grid.Column="1" Padding="5" IsReadOnly="True" Text="{Binding OpenedNSP.FilePath}" VerticalAlignment="Center" />
+                <DropDown x:Name="cbTarget" Grid.Column="1" Padding="5" Margin="10,0,0,0" IsEnabled="{Binding AllowActions}" SelectedIndex="0" SelectionChanged="ChangeInstallationTarget">
+                    <DropDownItem>GoldLeaf</DropDownItem>
+                    <DropDownItem>TinFoil</DropDownItem>    
+                </DropDown>
+              
             </Grid>
 
             <StackPanel Orientation="Vertical" IsVisible="{Binding !!OpenedNSP}">
                 <Border BorderBrush="#b2b2b2"
                         BorderThickness="1"
                         CornerRadius="2"
-                         Margin="0,10,0,10">
-                    <ItemsControl Items="{Binding OpenedNSP.Contents, Converter={StaticResource NCAFilter}}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Vertical" Margin="10">
-                                    <Grid>
-                                        <TextBlock Text="{Binding Name}"></TextBlock>
-                                        <TextBlock Text="{Binding HumanSize}" HorizontalAlignment="Right"></TextBlock>
-                                    </Grid>
-                                    <ProgressBar MinHeight="4" Maximum="{Binding Size}" Value="{Binding Transferred}"></ProgressBar>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                        Margin="0,10,0,10"
+                        IsVisible="{Binding InstallationTarget, Converter={StaticResource Equals}, ConverterParameter='GoldLeaf'}"
+                        >
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding OpenedNSP.BaseName}" Margin="5" FontSize="13" FontWeight="Bold"></TextBlock>
+                        <ItemsControl Items="{Binding OpenedNSP.Contents, Converter={StaticResource NCAFilter}}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical" Margin="10">
+                                        <Grid>
+                                            <TextBlock Text="{Binding Name}"></TextBlock>
+                                            <TextBlock Text="{Binding HumanSize}" HorizontalAlignment="Right"></TextBlock>
+                                        </Grid>
+                                        <ProgressBar MinHeight="4" Maximum="{Binding Size}" Value="{Binding Transferred}"></ProgressBar>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                 </Border>
+                
+                <StackPanel Orientation="Vertical" Margin="10" IsVisible="{Binding InstallationTarget, Converter={StaticResource Equals}, ConverterParameter='TinFoil'}">
+                    <Grid>
+                        <TextBlock Text="{Binding OpenedNSP.BaseName}"></TextBlock>
+                        <TextBlock Text="{Binding OpenedNSP.HumanSize}" HorizontalAlignment="Right"></TextBlock>
+                    </Grid>
+                    <ProgressBar  MinHeight="4" Maximum="{Binding OpenedNSP.Size}" Value="{Binding OpenedNSP.Transferred}"/>
+                </StackPanel>
+
                 <Button Command="{Binding InstallNSP}">Install</Button>
             </StackPanel>
         </StackPanel>
+        
         <DockPanel>
             <StackPanel DockPanel.Dock="Bottom" Height="28" Orientation="Horizontal">
                  <StackPanel.Background>

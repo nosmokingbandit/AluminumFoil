@@ -15,6 +15,16 @@ namespace AluminumFoil.Mac.ViewModels
             OpenNSP = ReactiveCommand.Create(() => _OpenNSP(), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b));
         }
 
+        private string _InstallationTarget = "GoldLeaf";
+        public string InstallationTarget
+        {
+            get => _InstallationTarget;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _InstallationTarget, value);
+            }
+        }
+
         private string _StatusBar = "Idle";
         public string StatusBar
         {
@@ -108,7 +118,23 @@ namespace AluminumFoil.Mac.ViewModels
             {
                 await Task.Run(() =>
                 {
-                    foreach (Tuple<string, string> statusUpdate in AluminumFoil.Mac.App.GoldLeaf.InstallNSP(OpenedNSP))
+                    Func<NSP.PFS0, IEnumerable<Tuple<string, string>>> installer = null;
+                    switch (InstallationTarget)
+                    {
+                        case "GoldLeaf":
+                            installer = Mac.App.GoldLeaf.InstallNSP;
+                            break;
+                        case "TinFoil":
+                            installer = Mac.App.TinFoil.InstallNSP;
+                            break;
+                    }
+
+                    if (installer == null)
+                    {
+                        return;
+                    };
+
+                    foreach (Tuple<string, string> statusUpdate in installer(OpenedNSP))
                     {
                         StatusBar = statusUpdate.Item1;
                         StatusBarIcon = statusUpdate.Item2;
