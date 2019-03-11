@@ -29,6 +29,8 @@ Your PC can now communicate with TinFoil. Leave your Switch on the `USB Install`
 
 ## For best results....
 
+OSX 10.12 or greater is required.
+
 When using TinFoil it is advised to use @satelliteseeker's build found here:
 https://github.com/satelliteseeker/Tinfoil/releases
 
