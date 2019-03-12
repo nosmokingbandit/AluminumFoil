@@ -16,16 +16,6 @@ namespace AluminumFoil.ViewModels
             CloseNSP = ReactiveCommand.Create(() => _CloseNSP(), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b));
         }
 
-        private string _NSPBasename = ""; // Todo remove this?
-        public string NSPBasename
-        {
-            get => _NSPBasename;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _NSPBasename, value);
-            }
-        }
-
         private string _InstallationTarget = "GoldLeaf";
         public string InstallationTarget
         {
@@ -84,7 +74,6 @@ namespace AluminumFoil.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _OpenedNSP, value);
-                NSPBasename = value.BaseName;
             }
         }
 

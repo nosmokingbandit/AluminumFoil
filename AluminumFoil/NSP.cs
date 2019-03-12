@@ -132,9 +132,7 @@ namespace AluminumFoil.NSP
             }
         }
     }
-    // TODO Can this be watched for changes without inheriting from ReactiveUI
-    // and calling Notify events? It would be nice to have the PFS0 file not
-    // using reactiveui and have the viewmodel take care of everything.
+
     public class PFS0File : INotifyPropertyChanged
     {
         public string Name { get; set; }    // Name of content eg 123456789.nca

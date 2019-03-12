@@ -37,7 +37,7 @@
             </Grid>
 
             <StackPanel Orientation="Vertical" Visibility="{Binding OpenedNSP, Converter={StaticResource VisibleIfExists}}">
-                <GroupBox Header="{Binding NSPBasename}" Margin="0,5,0,0" Visibility="{Binding InstallationTarget, Converter={StaticResource VisibleIfInstallationTarget}, ConverterParameter='GoldLeaf'}">
+                <GroupBox Header="{Binding NSP.BaseName}" Margin="0,5,0,0" Visibility="{Binding InstallationTarget, Converter={StaticResource VisibleIfInstallationTarget}, ConverterParameter='GoldLeaf'}">
                     <ItemsControl ItemsSource="{Binding OpenedNSP.Contents, Converter={StaticResource NCAFilter}}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
