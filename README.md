@@ -31,8 +31,7 @@ Your PC can now communicate with TinFoil. Leave your Switch on the `USB Install`
 
 OSX 10.12 or greater is required.
 
-When using TinFoil it is advised to use @satelliteseeker's build found here:
-https://github.com/satelliteseeker/Tinfoil/releases
+When using TinFoil it is advised to use @satelliteseeker's build found [here](https://github.com/satelliteseeker/Tinfoil/releases/tag/v0.2.1-USB-fix). Other versions may work but I wouldn't expect it to.
 
 As of 0.4, GoldLeaf's USB installs can be inconsistent. Any issues submitted regarding GoldLeaf installs will be ignored until GoldLeaf 0.5 is released.
 
