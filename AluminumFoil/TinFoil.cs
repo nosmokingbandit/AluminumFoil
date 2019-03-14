@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System;
 using ExtensionMethods;
 using System.IO;
@@ -28,34 +29,45 @@ namespace TinFoil
         }
 
 
-        public IEnumerable<Tuple<string, string>> InstallNSP(AluminumFoil.NSP.PFS0 nsp)
+        public IEnumerable<Tuple<string, string>> InstallNSP(ObservableCollection<AluminumFoil.NSP> NSPs)
         {
             // Installs NSP to Switch via TinFoil
             using (AluminumFoil.Switch NX = new AluminumFoil.Switch())
             {
-                // Send NSP List (just one though)
-                yield return new InstallUpdate("Sending NSP name to TinFoil", "installing");
+                // Send NSP List
+                yield return new InstallUpdate("Sending NSP names to TinFoil", "installing");
                 NX.Write(MAGIC);
-                byte[] nameBytes = nsp.BaseName.AsBytes();
-                NX.Write(BitConverter.GetBytes(Convert.ToUInt32(nameBytes.Length)));
-                NX.Write(new byte[0x8] { 0, 0, 0, 0, 0, 0, 0, 0 });
-                NX.Write(nameBytes);
 
-                yield return new InstallUpdate("Confirm Installation Options on TinFoil", "waiting");
+                Console.WriteLine("Sending NSP names to TinFoil");
+                string concatenatedNames = string.Join("\n", NSPs.Select(n => n.BaseName)); 
+
+                byte[] namesBytes = concatenatedNames.AsBytes();
+                NX.Write(BitConverter.GetBytes(Convert.ToUInt32(namesBytes.Length)));
+                NX.Write(new byte[0x8] { 0, 0, 0, 0, 0, 0, 0, 0 });
+                NX.Write(namesBytes);
+
+                Console.WriteLine("Waiting for response from TinFoil");
+                yield return new InstallUpdate("Select NSP on TinFoil", "waiting");
 
                 // Poll Commands
                 while (true)
                 {
-                    byte[] command = NX.Read(0x20);
+                    byte[] magic = NX.Read(0x4);
+                    if (magic.SequenceEqual(new byte[4])){
+                        Console.WriteLine("TinFoil seems to be closed, ending communication");
+                        break;
+                    }
 
-                    if (!command.SubArray(0x0, 0x4).SequenceEqual(COMMANDMAGIC))
+                    if (!magic.SequenceEqual(COMMANDMAGIC))
                     {
                         continue;
                     };
 
-                    byte[] cmdType = command.SubArray(0x4, 0x1);
-                    uint cmdID = BitConverter.ToUInt32(command, 0x8);
-                    ulong payloadSize = BitConverter.ToUInt64(command, 0xC);
+                    byte[] command = NX.Read(0x1C);
+
+                    byte[] cmdType = command.SubArray(0x0, 0x1);
+                    uint cmdID = BitConverter.ToUInt32(command, 0x4);
+                    ulong payloadSize = BitConverter.ToUInt64(command, 0x8);
 
                     if (cmdID == (uint)CommandIDs.Exit)
                     {
@@ -71,13 +83,20 @@ namespace TinFoil
                         ulong offset = BitConverter.ToUInt64(fileRangeRequest, 0x8);
                         ulong nameLen = BitConverter.ToUInt64(fileRangeRequest, 0x10);
 
-                        string nspName = BitConverter.ToString(NX.Read(Convert.ToInt32(nameLen)));
+                        string selectedBaseName = NX.Read(Convert.ToInt32(nameLen)).AsString();
+
+                        AluminumFoil.NSP selectedNSP = NSPs.FirstOrDefault(n => n.BaseName == selectedBaseName);
+
+                        if (selectedNSP == null)
+                        {
+                            throw new Exception(string.Format("TinFoil requested {0} but this NSP is not opened for installation.", selectedBaseName));
+                        }
 
                         yield return new InstallUpdate(string.Format("Transferring {0} requested bytes to TinFoil", size), "installing");
 
                         NX.Write(ResponseHeader((uint)CommandIDs.FileRange, size));
 
-                        using (BinaryReader fileReader = new BinaryReader(new FileStream(nsp.FilePath, FileMode.Open)))
+                        using (BinaryReader fileReader = new BinaryReader(new FileStream(selectedNSP.FilePath, FileMode.Open)))
                         {
                             fileReader.BaseStream.Seek((long)offset, SeekOrigin.Begin);
 
@@ -97,7 +116,7 @@ namespace TinFoil
 
                                 NX.Write(fileReader.ReadBytes((int)readLen));
                                 bytesRead += readLen;
-                                nsp.Transferred += readLen;
+                                selectedNSP.Transferred += readLen;
                             }
                         }
                     }

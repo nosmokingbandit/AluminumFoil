@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System;
 using ExtensionMethods;
@@ -34,13 +35,17 @@ namespace GoldLeaf
             return "";
         }
 
-        public IEnumerable<Tuple<string, string>> InstallNSP(AluminumFoil.NSP.PFS0 nsp)
+        public IEnumerable<Tuple<string, string>> InstallNSP(ObservableCollection<AluminumFoil.NSP> NSPs)
         {
+            AluminumFoil.NSP nsp = NSPs.First();
+
+            Console.WriteLine(string.Format("Installing {0} via GoldLeaf", nsp.BaseName));
             // Installs NSP to Switch via GoldLeaf
             int txLen;
 
             using (AluminumFoil.Switch NX = new AluminumFoil.Switch())
             {
+                Console.WriteLine("Sending ConnectionRequest");
                 NX.Write(commandHeaders["ConnectionRequest"]);
 
                 bool finished = false;
@@ -50,10 +55,13 @@ namespace GoldLeaf
 
                     string CommandName = RespType(resp);
 
+                    Console.WriteLine("Recieved command from GoldLeaf: " + CommandName);
                     switch (CommandName)
                     {
                         case "ConnectionResponse":
+                            Console.WriteLine("Sending NSP name to GoldLeaf");
                             yield return new InstallUpdate("Sending NSP name to GoldLeaf", "installing");
+
                             NX.Write(commandHeaders["NSPName"]);
 
                             var nameBytes = nsp.BaseName.AsBytes();
@@ -66,6 +74,7 @@ namespace GoldLeaf
                             break;
 
                         case "Start":
+                            Console.WriteLine("Sending NSP metadata to GoldLeaf");
                             yield return new InstallUpdate("Sending NSP Metadata", "installing");
 
                             NX.Write(commandHeaders["NSPData"]);
@@ -91,15 +100,16 @@ namespace GoldLeaf
                         case "NSPContent":
                             byte[] indBytes = NX.Read(0x4);
 
-                            // can only index observablecolleciton with int, which is kind of dumb...
                             var idx = (int)BitConverter.ToUInt32(indBytes, 0);
 
+
+                            Console.WriteLine(string.Format("GoldLeaf requested nca {0}: {1}", idx, nsp.Contents[idx].Name));
                             yield return new InstallUpdate("Installing " + nsp.Contents[idx].Name, "installing");
 
                             foreach (var chunk in nsp.ReadFile(idx))
                             {
                                 txLen = NX.Write(chunk);
-                                nsp.Contents[idx].Transferred += Convert.ToUInt64(chunk.Length);
+                                nsp.Transferred += (ulong)chunk.Length;
                             }
 
                             nsp.Contents[idx].Finished = true;
@@ -107,7 +117,7 @@ namespace GoldLeaf
                             break;
 
                         case "NSPTicket":
-
+                            Console.WriteLine("Sending NSP ticket");
                             yield return new InstallUpdate("Installing Ticket", "installing");
 
                             var tikind = -1;
@@ -123,7 +133,10 @@ namespace GoldLeaf
 
                             if (tikind == -1)
                             {
-                                throw new IndexOutOfRangeException("Ticket file not found in NSP header.");
+                                Console.WriteLine("Could not find tik in NSP");
+                                Exception exc = new IndexOutOfRangeException("Ticket file not found in NSP header.");
+                                exc.Source = nsp.FilePath;
+                                throw exc;
                             };
 
                             byte[] ticketFile = new byte[nsp.Contents[tikind].Size];
@@ -140,11 +153,13 @@ namespace GoldLeaf
                             break;
 
                         case "Finish":
+                            Console.WriteLine("Finished installing " + nsp.BaseName);
                             yield return new InstallUpdate("Finished", "finished");
                             finished = true;
                             break;
                         default:
-                            yield return new InstallUpdate(string.Format("Unknown request from GoldLeaf: {0}", resp.AsString()), "alert");
+                            Console.WriteLine("Unhandled command from GoldLeaf: " + resp.AsString());
+                            yield return new InstallUpdate("Unknown request from GoldLeaf: " + resp.AsString(), "alert");
                             finished = true;
                             break;
                     }

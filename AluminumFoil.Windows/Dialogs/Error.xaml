@@ -14,14 +14,15 @@
     <StackPanel Orientation="Vertical" Margin="10">
         <StackPanel Orientation="Horizontal">
             <Image Source="/AluminumFoil.Windows;component/Assets/Images/error_96.png" Height="96"></Image>
-            <StackPanel Orientation="Vertical">
-                <Label Content="{Binding Title}" FontWeight="Bold"></Label>
-                <Label Width="180">
+            <DockPanel>
+                <Label DockPanel.Dock="Top" Content="{Binding Title}" FontWeight="Bold"></Label>
+                <Label DockPanel.Dock="Top" Width="180">
                     <Label.Content>
                         <AccessText TextWrapping="Wrap" Text="{Binding Message}"/>
                     </Label.Content>
                 </Label>
-            </StackPanel>
+                <Label DockPanel.Dock="Bottom" Content="{Binding ErrCode}" FontSize="10" Height="24" VerticalAlignment="Bottom"></Label>
+            </DockPanel>
         </StackPanel>
         <Button Click="HandleClose" Padding="5">Close</Button>
     </StackPanel>

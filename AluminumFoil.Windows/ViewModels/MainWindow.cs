@@ -1,8 +1,10 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
 using System.Reactive;
 using Microsoft.Win32;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
 namespace AluminumFoil.ViewModels
@@ -11,17 +13,32 @@ namespace AluminumFoil.ViewModels
     {
         public MainWindow()
         {
-            InstallNSP = ReactiveCommand.Create(() => _InstallNSP(), this.WhenAnyValue(vm => vm.OpenedNSP, vm => vm.AllowActions, (a, b) => a != null && b));
-            OpenNSP = ReactiveCommand.Create(() => _OpenNSP(), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b ));
-            CloseNSP = ReactiveCommand.Create(() => _CloseNSP(), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b));
+            InstallNSP = ReactiveCommand.Create(() => _InstallNSP(), this.WhenAnyValue(vm => vm.OpenedNSP.Count, vm => vm.AllowActions, (a, b) => a != 0 && b));
+            OpenFileDialog = ReactiveCommand.Create(() => _OpenFileDialog(), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b ));
+            RemoveNSP = ReactiveCommand.Create<string, bool>((fname) => _RemoveNSP(fname), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b));
         }
 
+        #region properties
         private string _InstallationTarget = "GoldLeaf";
         public string InstallationTarget
         {
             get => _InstallationTarget;
             set
             {
+                if (value == _InstallationTarget) return;
+
+                Console.WriteLine("Changing InstallationTarget to:" + value);
+
+                if (value == "GoldLeaf")
+                {
+                    Console.WriteLine("InstallationTarget is GoldLeaf, removing all but first OpenedNSP");
+                    if (OpenedNSP.Count > 1)
+                    {
+                        NSP first = OpenedNSP[0];
+                        OpenedNSP.Clear();
+                        OpenedNSP.Add(first);
+                    }
+                }
                 this.RaiseAndSetIfChanged(ref _InstallationTarget, value);
             }
         }
@@ -66,9 +83,9 @@ namespace AluminumFoil.ViewModels
                 this.RaiseAndSetIfChanged(ref _StatusBarIcon, string.Format("/AluminumFoil.Windows;component/Assets/Images/{0}_24.png", value));
             }
         }
-        
-        private AluminumFoil.NSP.PFS0 _OpenedNSP;
-        public AluminumFoil.NSP.PFS0 OpenedNSP
+
+        private ObservableCollection<NSP> _OpenedNSP = new ObservableCollection<NSP>();
+        public ObservableCollection<NSP> OpenedNSP
         {
             get => _OpenedNSP;
             set
@@ -76,29 +93,34 @@ namespace AluminumFoil.ViewModels
                 this.RaiseAndSetIfChanged(ref _OpenedNSP, value);
             }
         }
+        #endregion
 
-        //
-        //======== Button Commands
-        //
-        public ReactiveCommand<Unit, Unit> OpenNSP { get; set; }
-        private void _OpenNSP()
+        #region methods
+        public void OpenNSPs(string[] fnames)
         {
-            var dlg = new OpenFileDialog();
-            dlg.Multiselect = false;
-            dlg.Filter = "Switch eShop Files (*.nsp)|*.nsp";
-
-            if(dlg.ShowDialog() == false){
-                return;
-            }
-
             try
             {
-                OpenedNSP = new AluminumFoil.NSP.PFS0(dlg.FileName);
-            } 
+                if (InstallationTarget == "GoldLeaf")
+                {
+                    Console.WriteLine("Clearing OpenedNSP list");
+                    OpenedNSP.Clear();
+                    fnames = new string[] { fnames[0] };
+                }
+                foreach (string fname in fnames)
+                {
+                    Console.WriteLine("Opening " + fname);
+                    if (OpenedNSP.Any(nsp => nsp.FilePath == fname)){
+                        Console.WriteLine(fname + "already opened, skipping");
+                        continue;
+                    }
+                    OpenedNSP.Add(new NSP(fname));
+
+                }
+            }
             catch (Exception e)
             {
-                OpenedNSP = null;
-                var errDlg = new Dialogs.Error("Corrupt NSP", e.Message);
+                OpenedNSP.Clear();
+                var errDlg = new Dialogs.Error("Corrupt NSP", e.Message, e.Source);
                 errDlg.ShowDialog();
                 return;
             }
@@ -108,11 +130,41 @@ namespace AluminumFoil.ViewModels
                 StatusBarIcon = "idle";
             }
         }
+        #endregion
 
-        public ReactiveCommand<Unit, Unit> CloseNSP { get; set; }
-        private void _CloseNSP()
+        #region button commands
+        public ReactiveCommand<Unit, Unit> OpenFileDialog { get; set; }
+        private void _OpenFileDialog()
         {
-            OpenedNSP = null;
+            Console.WriteLine("Opening NSP");
+            var dlg = new OpenFileDialog();
+            if (InstallationTarget == "TinFoil")
+            {
+                dlg.Multiselect = true;
+            }
+            dlg.Filter = "Switch eShop Files (*.nsp)|*.nsp";
+
+            if(dlg.ShowDialog() == false){
+                return;
+            }
+
+            OpenNSPs(dlg.FileNames);   
+        }
+
+        public ReactiveCommand<string, bool> RemoveNSP { get; set; }
+        // TODO return type Unit throws an error -- can this be fixed?
+        // There is nothing wrong with returning bool, its just kind of pointless
+        private bool _RemoveNSP(string fileName)
+        {
+            for (var i = 0; i < OpenedNSP.Count; i++)
+            {
+                if (OpenedNSP[i].FilePath == fileName)
+                {
+                    OpenedNSP.RemoveAt(i);
+                    break;
+                }
+            }
+            return true;
         }
 
         public ReactiveCommand<Unit, Unit> InstallNSP { get; set; }
@@ -123,7 +175,7 @@ namespace AluminumFoil.ViewModels
             {
                 await Task.Run(() =>
                 {
-                    Func<NSP.PFS0, IEnumerable<Tuple<string, string>>> installer = null;
+                    Func<ObservableCollection<NSP>, IEnumerable<Tuple<string, string>>> installer = null;
                     switch (InstallationTarget)
                     {
                         case "GoldLeaf":
@@ -145,7 +197,7 @@ namespace AluminumFoil.ViewModels
                         StatusBarIcon = statusUpdate.Item2;
                     }
                 });
-                var finDlg = new Dialogs.Success("Installation Finished", OpenedNSP.BaseName + " Installation Finished");
+                var finDlg = new Dialogs.Success("Installation Finished", "Neat");
                 finDlg.ShowDialog();
             }
             catch (Exception e)
@@ -155,9 +207,12 @@ namespace AluminumFoil.ViewModels
             }
             finally
             {
+                StatusBar = "Idle";
+                StatusBarIcon = "idle";
                 AllowActions = true;
             };
             return;
         }
+        #endregion
     }
 }

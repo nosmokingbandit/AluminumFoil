@@ -3,17 +3,15 @@ using System.Linq;
 using ExtensionMethods;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using ReactiveUI;
 
-namespace AluminumFoil.NSP
+namespace AluminumFoil
 {
-    public class PFS0 : ReactiveObject
+    public class NSP : ReactiveObject
     {
 
         public string FilePath { get; set; }
-        public ObservableCollection<PFS0File> Contents { get; } = new ObservableCollection<PFS0File>();
+        public List<PFS0File> Contents { get; } = new List<PFS0File>();
 
         private string _BaseName;
         public string BaseName
@@ -49,10 +47,12 @@ namespace AluminumFoil.NSP
         private readonly long DataOffset;
         private readonly byte[] StringTable;
 
-        public PFS0(string fp)
+        public NSP(string fp)
         // Constructor reads metadata from NSP header and fills class fields
         // fp: path to NSP file
         {
+            Console.WriteLine("Opening nsp: " + fp);
+
             FilePath = fp;
             FileInfo fi = new FileInfo(FilePath);
             BaseName = fi.Name;
@@ -63,9 +63,12 @@ namespace AluminumFoil.NSP
                 reader.BaseStream.Seek(0, 0);
 
                 byte[] magic = reader.ReadBytes(0x4);
+                Console.WriteLine("NSP header is " + magic.AsString());
                 if (!magic.SequenceEqual(PFS0MAGIC))
                 {
-                    throw new NotSupportedException("Invalid NSP header; Wanted PFS0 got " + magic.AsString());
+                    Exception exc = new NotSupportedException("Invalid NSP header; Wanted PFS0 got " + magic.AsString());
+                    exc.Source = FilePath;
+                    throw exc;
                 }
 
                 uint fileCount = reader.ReadUInt32();
@@ -133,29 +136,13 @@ namespace AluminumFoil.NSP
         }
     }
 
-    public class PFS0File : INotifyPropertyChanged
+    public class PFS0File
     {
         public string Name { get; set; }    // Name of content eg 123456789.nca
         public ulong Offset { get; set; }   // Start of file in nsp counting from byte-0x0
         public ulong Size { get; set; }     // Size of the file in bytes
-        private ulong _Transferred;
-        public ulong Transferred
-        {
-            get => _Transferred;
-            set
-            {
-                _Transferred = value;
-                NotifyPropertyChanged("Transferred");
-            }
-        }
-
+        public ulong Transferred { get; set; }
         public string HumanSize { get; set; }
         public bool Finished { get; set; }
-
-        private void NotifyPropertyChanged(string propName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

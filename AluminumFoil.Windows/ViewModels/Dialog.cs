@@ -6,10 +6,21 @@ namespace AluminumFoil.ViewModels
     // Base vm for dialogs to set title and message
 
     {
-        public Dialog(string title, string message)
+        public Dialog(string title, string message, string errcode="")
         {
             Title = title;
             Message = message;
+            ErrCode = errcode;
+        }
+
+        private string _ErrCode;
+        public string ErrCode
+        {
+            get => _ErrCode;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _ErrCode, value);
+            }
         }
 
         private string _Title;

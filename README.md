@@ -35,3 +35,8 @@ When using TinFoil it is advised to use @satelliteseeker's build found here:
 https://github.com/satelliteseeker/Tinfoil/releases
 
 As of 0.4, GoldLeaf's USB installs can be inconsistent. Any issues submitted regarding GoldLeaf installs will be ignored until GoldLeaf 0.5 is released.
+
+
+#### Buy me a beer?
+
+[17BfQVGCsmHBNkVVbL1GxhhYFUMX2uytaT](bitcoin:17BfQVGCsmHBNkVVbL1GxhhYFUMX2uytaT?label=AluminumFoil")

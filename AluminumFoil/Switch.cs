@@ -33,19 +33,21 @@ namespace AluminumFoil
 
         public void Dispose()
         {
+            Console.WriteLine("Closing connection to Switch");
             LibUsbContext.Dispose();
             NX.Dispose();
         }
 
         public Switch()
         {
+            Console.WriteLine("Connecting to Switch");
             this.LibUsbContext = new UsbContext();
             var usbDeviceCollection = LibUsbContext.List();
             NX = usbDeviceCollection.FirstOrDefault(d => d.ProductId == PID && d.VendorId == VID);
 
             if (NX == null)
             {
-                throw new Exception("Unable to find Switch. Ensure Switch is connected and GoldLeaf's USB Install is open.");
+                throw new Exception("Unable to find Switch. Ensure Switch is connected and USB Install is open.");
             }
 
             NX.Open();

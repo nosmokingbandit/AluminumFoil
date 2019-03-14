@@ -24,3 +24,5 @@ AluminumFoil.Windows/obj/
 *.out
 
 AluminumFoil/AluminumFoil\.csproj\.user
+
+AluminumFoil\.Windows/publish/
