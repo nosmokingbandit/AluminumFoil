@@ -30,7 +30,6 @@ namespace AluminumFoil.Mac.Views
             dc.InstallationTarget = ddi.Content.ToString();
         }
 
-
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);

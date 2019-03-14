@@ -52,22 +52,17 @@ namespace TinFoil
                 // Poll Commands
                 while (true)
                 {
-                    byte[] magic = NX.Read(0x4);
-                    if (magic.SequenceEqual(new byte[4])){
-                        Console.WriteLine("TinFoil seems to be closed, ending communication");
-                        break;
-                    }
 
-                    if (!magic.SequenceEqual(COMMANDMAGIC))
+                    byte[] command = NX.Read(0x20);
+
+                    if (!command.SubArray(0x0, 0x4).SequenceEqual(COMMANDMAGIC))
                     {
                         continue;
                     };
 
-                    byte[] command = NX.Read(0x1C);
-
-                    byte[] cmdType = command.SubArray(0x0, 0x1);
-                    uint cmdID = BitConverter.ToUInt32(command, 0x4);
-                    ulong payloadSize = BitConverter.ToUInt64(command, 0x8);
+                    byte[] cmdType = command.SubArray(0x4, 0x1);
+                    uint cmdID = BitConverter.ToUInt32(command, 0x8);
+                    ulong payloadSize = BitConverter.ToUInt64(command, 0xC);
 
                     if (cmdID == (uint)CommandIDs.Exit)
                     {

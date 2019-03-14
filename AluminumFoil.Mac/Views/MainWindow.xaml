@@ -1,83 +1,84 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Name="Window"
         xmlns:converters="clr-namespace:BindingConverters"
         Title="AluminumFoil"
         >
 
     <Window.Resources>
         <converters:BitmapValueConverter x:Key="BitmapValueConverter"/>
-        <converters:NCAFilter x:Key="NCAFilter"/>
-        <converters:Equals x:Key="Equals"/>
     </Window.Resources>
     
     <StackPanel x:Name="MainPanel">
         <StackPanel Margin="10">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                
-                <Button Grid.Column="0" Padding="5" Margin="0,0,5,0" Command="{Binding OpenNSP}">Open NSP</Button>
-                <DropDown x:Name="cbTarget" Grid.Column="1" Padding="5" Margin="10,0,0,0" IsEnabled="{Binding AllowActions}" SelectedIndex="0" SelectionChanged="ChangeInstallationTarget">
-                    <DropDownItem>GoldLeaf</DropDownItem>
-                    <DropDownItem>TinFoil</DropDownItem>    
-                </DropDown>
-              
-            </Grid>
-
-            <StackPanel Orientation="Vertical" IsVisible="{Binding !!OpenedNSP}">
-                <Border BorderBrush="#b2b2b2"
-                        BorderThickness="1"
-                        CornerRadius="2"
-                        Margin="0,10,0,10"
-                        IsVisible="{Binding InstallationTarget, Converter={StaticResource Equals}, ConverterParameter='GoldLeaf'}"
-                        >
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding OpenedNSP.BaseName}" Margin="5" FontSize="13" FontWeight="Bold"></TextBlock>
-                        <ItemsControl Items="{Binding OpenedNSP.Contents, Converter={StaticResource NCAFilter}}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Vertical" Margin="10">
-                                        <Grid>
-                                            <TextBlock Text="{Binding Name}"></TextBlock>
-                                            <TextBlock Text="{Binding HumanSize}" HorizontalAlignment="Right"></TextBlock>
-                                        </Grid>
-                                        <ProgressBar MinHeight="4" Maximum="{Binding Size}" Value="{Binding Transferred}"></ProgressBar>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </Border>
-                
-                <StackPanel Orientation="Vertical" Margin="10" IsVisible="{Binding InstallationTarget, Converter={StaticResource Equals}, ConverterParameter='TinFoil'}">
-                    <Grid>
-                        <TextBlock Text="{Binding OpenedNSP.BaseName}"></TextBlock>
-                        <TextBlock Text="{Binding OpenedNSP.HumanSize}" HorizontalAlignment="Right"></TextBlock>
-                    </Grid>
-                    <ProgressBar  MinHeight="4" Maximum="{Binding OpenedNSP.Size}" Value="{Binding OpenedNSP.Transferred}"/>
-                </StackPanel>
-
-                <Button Command="{Binding InstallNSP}">Install</Button>
-            </StackPanel>
+            <Button Grid.Column="0" Command="{Binding OpenFileDialog}">
+                Open NSP
+            </Button>
+            <Border x:Name="GroupBox" 
+                    BorderBrush="#b2b2b2"
+                    BorderThickness="1"
+                    CornerRadius="2"
+                    Margin="0,10,0,10"
+                    MinHeight="16"
+                    >
+                <ItemsControl Items="{Binding OpenedNSP}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,5,0,5">
+                                <!-- There has to be a better way than this -->
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0" Margin="10,0,10,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="4"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding BaseName}" VerticalAlignment="Bottom"></TextBlock>
+                                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding HumanSize}" VerticalAlignment="Bottom"></TextBlock>
+                                    <ProgressBar Grid.ColumnSpan="2" Grid.Row="1" Maximum="{Binding Size}" Value="{Binding Transferred}" MinHeight="4"/>
+                                </Grid>
+                               
+                                <Button Grid.Column="1" Width="24" Height="24" Margin="8,0,8,0" Command="{Binding $parent[ItemsControl].DataContext.RemoveNSP}" CommandParameter="{Binding FilePath}" BorderThickness="0" Background="Transparent" Padding="0">
+                                    <Image Source="resm:AluminumFoil.Mac.Assets.Images.close_16.png" Height="16" VerticalAlignment="Center"/>
+                                </Button>
+                                
+                            </Grid>
+                        </DataTemplate> 
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+            <Button Command="{Binding InstallNSP}" Margin="0,0,0,0">Install</Button>
         </StackPanel>
-        
-        <DockPanel>
-            <StackPanel DockPanel.Dock="Bottom" Height="28" Orientation="Horizontal">
-                 <StackPanel.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,28">
-                        <GradientStop Color="#424242" Offset="0.0" />
-                        <GradientStop Color="#EEEEEE" Offset="0.03" />
-                        <GradientStop Color="#9E9E9E" Offset="1.0" />
-                    </LinearGradientBrush>
-                </StackPanel.Background>
-                
+
+        <Grid x:Name="StatusBar" Height="28">
+             <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,28">
+                    <GradientStop Color="#424242" Offset="0.0" />
+                    <GradientStop Color="#EEEEEE" Offset="0.03" />
+                    <GradientStop Color="#9E9E9E" Offset="1.0" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <Image Source="{Binding StatusBarIcon, Converter={StaticResource BitmapValueConverter}}"></Image>
                 <TextBlock Text="{Binding StatusBar}" VerticalAlignment="Center"></TextBlock>
-            </StackPanel>
-        </DockPanel>
+            </StackPanel>    
+            <DropDown x:Name="cbTarget" Grid.Column="1" Padding="5" Margin="10,0,0,0" IsEnabled="{Binding AllowActions}" SelectedIndex="0" SelectionChanged="ChangeInstallationTarget" BorderThickness="0">
+                <DropDownItem>GoldLeaf</DropDownItem>
+                <DropDownItem>TinFoil</DropDownItem>    
+            </DropDown>
+        </Grid>
     </StackPanel>
 
 
-</Window>
+</Window> 

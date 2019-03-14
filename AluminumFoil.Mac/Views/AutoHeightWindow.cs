@@ -10,12 +10,16 @@ namespace AluminumFoil.Mac.Views
         //      height so that it measures outside the window bounds.
         // In order to use this define the sizing element as MainPanel in 
         //      the codebehind xaml.cs
+        // This is far from perfect and can show some weird black areas but
+        //      it is better than nothing.
 
         public StackPanel MainPanel;
 
         public AutoHeightWindow()
         {
             this.LayoutUpdated += AutoSizeHeight;
+            this.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top;
+
         }
 
         public void AutoSizeHeight(object sender, System.EventArgs e)

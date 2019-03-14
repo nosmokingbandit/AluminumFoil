@@ -10,6 +10,7 @@
             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                 <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
                 <TextBlock Width="180" TextWrapping="1" Text="{Binding Message}"/>
+                <TextBlock Content="{Binding ErrCode}" FontSize="10" Height="24" VerticalAlignment="Bottom"/>
             </StackPanel>
         </StackPanel>
         <Button Click="HandleClose" Padding="5">Close</Button>

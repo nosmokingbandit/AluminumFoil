@@ -7,7 +7,7 @@ namespace AluminumFoil.Mac.Dialogs
 {
     public class Error : Views.AutoHeightWindow
     {
-        public Error(string Title, string Message)
+        public Error(string Title, string Message, string errmessage = "")
         {
             this.MinWidth = 300;
             this.WindowStartupLocation = WindowStartupLocation.CenterOwner;

@@ -13,9 +13,9 @@ namespace AluminumFoil.ViewModels
     {
         public MainWindow()
         {
-            InstallNSP = ReactiveCommand.Create(() => _InstallNSP(), this.WhenAnyValue(vm => vm.OpenedNSP.Count, vm => vm.AllowActions, (a, b) => a != 0 && b));
-            OpenFileDialog = ReactiveCommand.Create(() => _OpenFileDialog(), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b ));
-            RemoveNSP = ReactiveCommand.Create<string, bool>((fname) => _RemoveNSP(fname), this.WhenAnyValue(vm => vm.OpenNSPButtonEnable, vm => vm.AllowActions, (a, b) => a && b));
+            InstallNSP = ReactiveCommand.Create(_InstallNSP, this.WhenAnyValue(vm => vm.OpenedNSP.Count, vm => vm.AllowActions, (a, b) => a != 0 && b));
+            OpenFileDialog = ReactiveCommand.Create(_OpenFileDialog, this.WhenAnyValue(vm => vm.AllowActions));
+            RemoveNSP = ReactiveCommand.Create<string, bool>((f) => _RemoveNSP(f), this.WhenAnyValue(vm => vm.AllowActions));
         }
 
         #region properties
@@ -61,16 +61,6 @@ namespace AluminumFoil.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _AllowActions, value);
-            }
-        }
-
-        private bool _OpenNSPButtonEnable = true;
-        public bool OpenNSPButtonEnable
-        {
-            get => _OpenNSPButtonEnable;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _OpenNSPButtonEnable, value);
             }
         }
 
