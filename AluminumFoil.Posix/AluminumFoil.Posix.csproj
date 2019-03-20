@@ -1,0 +1,83 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+    <RuntimeIdentifiers>debian.8-x64;debian.9-x64;ubuntu.18.04-x64;ubuntu.16.04-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="**\*.xaml.cs">
+      <DependentUpon>Success.xaml</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="**\*.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\*" />
+    <Compile Update="Dialogs\Error.xaml.cs">
+      <DependentUpon>Error.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+    <EmbeddedResource Remove="Assets\MacStyle.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Assets\Images\*.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Images\*.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AluminumFoil\AluminumFoil.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dialogs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="66-nintendo-switch-tinfoil.rules" CopyToPublishDirectory="PreserveNewest">
+      <LinuxPath>/etc/udev/rules.d/66-nintendo-switch-tinfoil.rules</LinuxPath>
+    </Content>
+    <Content Include="Assets/Images/Icon.png" CopyToPublishDirectory="PreserveNewest">
+      <LinuxPath>/usr/share/icons/AluminumFoil.png</LinuxPath>
+    </Content>
+    <Content Include="AluminumFoil.desktop" CopyToPublishDirectory="PreserveNewest">
+      <LinuxPath>/usr/share/applications/AluminumFoil.desktop</LinuxPath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'ubuntu.18.04-x64'">
+    <DebDotNetDependencies Include="libc6" />
+    <DebDotNetDependencies Include="libgcc1" />
+    <DebDotNetDependencies Include="libgssapi-krb5-2" />
+    <DebDotNetDependencies Include="libstdc++6" />
+    <DebDotNetDependencies Include="zlib1g" />
+    <DebDotNetDependencies Include="libssl1.0.0" />
+    <DebDotNetDependencies Include="libicu60" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('ubuntu')) OR $(RuntimeIdentifier.StartsWith('debian'))">
+    <DebDependency Include="libusb-1.0-0-dev" Version=""/>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PostInstallScript>udevadm control --reload-rules</PostInstallScript>
+    <PostRemoveScript>udevadm control --reload-rules</PostRemoveScript>
+  </PropertyGroup>  
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.7.1-*" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.7.1-*" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.7.1-*" />
+    <PackageReference Include="Packaging.Targets" Version="0.1.56" />    
+    <DotNetCliToolReference Include="dotnet-tarball" Version="0.1.56" />
+    <DotNetCliToolReference Include="dotnet-deb" Version="0.1.56" />
+  </ItemGroup>
+</Project>

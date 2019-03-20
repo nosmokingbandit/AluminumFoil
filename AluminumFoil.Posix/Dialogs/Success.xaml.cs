@@ -2,16 +2,17 @@
 using Avalonia.Markup.Xaml;
 using Avalonia.Interactivity;
 
-namespace AluminumFoil.Mac.Dialogs
+namespace AluminumFoil.Posix.Dialogs
 {
     public class Success : Views.AutoHeightWindow
     {
         public Success(string Title, string Message)
         {
-            this.MinWidth = 300;
-            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            this.CanResize = false;
-            this.DataContext = new Mac.ViewModels.Dialog(Title, Message);
+            MinWidth = 300;
+            Width = 300;
+            WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            CanResize = false;
+            DataContext = new ViewModels.Dialog(Title, Message);
             AvaloniaXamlLoader.Load(this);
 
             MainPanel = this.Find<StackPanel>("MainPanel");
@@ -19,7 +20,7 @@ namespace AluminumFoil.Mac.Dialogs
 
         private void HandleClose(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

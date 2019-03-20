@@ -1,7 +1,8 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 
-namespace AluminumFoil.Mac.Views
+namespace AluminumFoil.Posix.Views
 {
     public class AutoHeightWindow : Window
     {
@@ -17,16 +18,16 @@ namespace AluminumFoil.Mac.Views
 
         public AutoHeightWindow()
         {
-            this.LayoutUpdated += AutoSizeHeight;
-            this.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top;
+            LayoutUpdated += AutoSizeHeight;
+            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top;
 
         }
 
-        public void AutoSizeHeight(object sender, System.EventArgs e)
+        public void AutoSizeHeight(object sender, EventArgs e)
         {
-            MainPanel.Measure(new Size(this.Width, double.PositiveInfinity));
-            this.Height = MainPanel.DesiredSize.Height;
-            this.InvalidateMeasure();
+            MainPanel.Measure(new Size(Width, double.PositiveInfinity));
+            Height = MainPanel.DesiredSize.Height;
+            InvalidateMeasure();
         }
     }
 }

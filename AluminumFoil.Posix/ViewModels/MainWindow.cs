@@ -5,9 +5,11 @@ using System.Reactive;
 using Avalonia.Controls;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using Avalonia;
 
-namespace AluminumFoil.Mac.ViewModels
+namespace AluminumFoil.Posix.ViewModels
 {
     public class MainWindow : ReactiveObject
     {
@@ -64,17 +66,21 @@ namespace AluminumFoil.Mac.ViewModels
             }
         }
 
-        private string _StatusBarIcon = "resm:AluminumFoil.Mac.Assets.Images.idle_24.png";
+        static readonly string _namespace = typeof(App).Namespace;
+
+        string _StatusBarIcon = $"resm:{_namespace}.Assets.Images.idle_24.png";
         public string StatusBarIcon
         {
             get => _StatusBarIcon;
             set
             {
-                this.RaiseAndSetIfChanged(ref _StatusBarIcon, string.Format("resm:AluminumFoil.Mac.Assets.Images.{0}_24.png", value));
+                this.RaiseAndSetIfChanged(ref _StatusBarIcon, $"resm:{_namespace}.Assets.Images.{value}_24.png");
             }
         }
 
         private ObservableCollection<NSP> _OpenedNSP = new ObservableCollection<NSP>();
+        string _lastOpenFolder;
+
         public ObservableCollection<NSP> OpenedNSP
         {
             get => _OpenedNSP; 
@@ -99,7 +105,7 @@ namespace AluminumFoil.Mac.ViewModels
 
                 foreach (string nameUri in fnames)
                 {
-                    string filename = System.Uri.UnescapeDataString(nameUri);
+                    string filename = Uri.UnescapeDataString(nameUri);
                     if (OpenedNSP.Any(nsp => nsp.FilePath == filename))
                     {
                         Console.WriteLine(filename + "already opened, skipping");
@@ -113,7 +119,7 @@ namespace AluminumFoil.Mac.ViewModels
             {
                 OpenedNSP.Clear();
                 var errDlg = new Dialogs.Error("Corrupt NSP", e.Message, e.Source);
-                errDlg.ShowDialog(App.Current.MainWindow);
+                errDlg.ShowDialog(Application.Current.MainWindow);
                 return;
             }
             finally
@@ -131,16 +137,24 @@ namespace AluminumFoil.Mac.ViewModels
             Console.WriteLine("Opening NSP");
             var dlg = new OpenFileDialog();
             dlg.AllowMultiple = (InstallationTarget == "TinFoil");
+            if (!String.IsNullOrEmpty(_lastOpenFolder))
+            {
+                Console.WriteLine($"Setting initial directory to {_lastOpenFolder}");
+                // Hack for linux? Maybe more?
+                dlg.InitialDirectory = _lastOpenFolder + Path.DirectorySeparatorChar;
+            }
 
             dlg.Filters.Add(new FileDialogFilter { Name = "Switch eShop Files (*.nsp)", Extensions = new List<string> { "nsp" } });
 
-            string[] selectedFiles = await dlg.ShowAsync(App.Current.MainWindow);
+            string[] selectedFiles = await dlg.ShowAsync(Application.Current.MainWindow);
 
-            if (selectedFiles.Length == 0)
+            if (selectedFiles == null || selectedFiles.Length == 0)
             {
                 Console.WriteLine("Dialog returned empty array.");
                 return;
             }
+
+            _lastOpenFolder = Path.GetDirectoryName(selectedFiles.Last());
 
             OpenNSPs(selectedFiles);
         }
@@ -170,7 +184,7 @@ namespace AluminumFoil.Mac.ViewModels
             {
                 await Task.Run(() =>
                 {
-                    Func<ObservableCollection<NSP>, IEnumerable<Tuple<string, string>>> installer = null;
+                    Func<ObservableCollection<NSP>, IEnumerable<(string, string)>> installer = null;
                     switch (InstallationTarget)
                     {
                         case "GoldLeaf":
@@ -186,19 +200,20 @@ namespace AluminumFoil.Mac.ViewModels
                         return;
                     };
 
-                    foreach (Tuple<string, string> statusUpdate in installer(OpenedNSP))
+                    foreach ((string statusBarText, string statusBarIcon) in installer(OpenedNSP))
                     {
-                        StatusBar = statusUpdate.Item1;
-                        StatusBarIcon = statusUpdate.Item2;
+                        StatusBar = statusBarText;
+                        StatusBarIcon = statusBarIcon;
                     }
                 });
                 var finDlg = new Dialogs.Success("Installation Finished", "");
-                await finDlg.ShowDialog(App.Current.MainWindow);
+                await finDlg.ShowDialog(Application.Current.MainWindow);
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 var errDlg = new Dialogs.Error("Installation Failed", e.Message);
-                await errDlg.ShowDialog(App.Current.MainWindow);
+                await errDlg.ShowDialog(Application.Current.MainWindow);
             }
             finally
             {

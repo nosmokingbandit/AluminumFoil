@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ReactiveUI;
 
-namespace AluminumFoil.Mac.ViewModels
+namespace AluminumFoil.Posix.ViewModels
 {
     public class ViewModelBase : ReactiveObject
     {
