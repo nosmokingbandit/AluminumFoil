@@ -15,6 +15,11 @@ namespace AluminumFoil.Windows
             this.Closing += HandleClosing;
         }
 
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            this.MinHeight = this.DesiredSize.Height;
+        }
+
         private void VerifyDragNSPs(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -30,7 +35,6 @@ namespace AluminumFoil.Windows
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             ViewModels.MainWindow dc = (ViewModels.MainWindow)this.DataContext;
             dc.OpenNSPs(files);
-
         }
 
         private void HandleClosing(object sender, System.ComponentModel.CancelEventArgs e)

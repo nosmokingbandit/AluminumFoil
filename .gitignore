@@ -28,3 +28,7 @@ AluminumFoil/AluminumFoil\.csproj\.user
 *.DotSettings.user
 
 AluminumFoil\.Windows/publish/
+
+AluminumFoil\.Mac/bin/
+
+AluminumFoil\.Mac/obj/

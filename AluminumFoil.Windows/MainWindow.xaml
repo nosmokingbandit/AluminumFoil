@@ -6,10 +6,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Aluminum Foil"
-        SizeToContent="Height" 
+        SizeToContent="Height"
+        MaxHeight="600"
+        MinWidth="400"
         Width="400"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize">
+        Loaded="WindowLoaded"
+        >
 
     <Window.Resources>
         <Style TargetType="Button">
@@ -17,18 +20,25 @@
         </Style>
     </Window.Resources>
 
-    <StackPanel>
-        <StackPanel Margin="10">
-            <Button Command="{Binding OpenFileDialog}" Drop="OpenNSPDrop" DragOver="VerifyDragNSPs" AllowDrop="{Binding AllowActions}">
-                Open NSP
-            </Button>
+    <Grid VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-            <GroupBox Header="Opened NPSs" Margin="0,5,0,10" MinHeight="32">
+        <Button Grid.Row="0" Margin="10,10,10,5" Command="{Binding OpenFileDialog}" Drop="OpenNSPDrop" DragOver="VerifyDragNSPs" AllowDrop="{Binding AllowActions}">
+            Open NSP
+        </Button>
+
+        <GroupBox Grid.Row="1" Header="Opened NPSs" Margin="10,0,10,5">
+            <ScrollViewer MinHeight="48">
                 <ItemsControl ItemsSource="{Binding OpenedNSP}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,5,0,5">
-                                 <!-- There has to be a better way than this -->
+                                    <!-- There has to be a better way than this -->
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="auto"/>
@@ -53,12 +63,12 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </GroupBox>
+            </ScrollViewer>
+        </GroupBox>
 
-            <Button Command="{Binding InstallNSP}" Margin="0,0,0,0">Install</Button>
-        </StackPanel>
+        <Button Grid.Row="2" Command="{Binding InstallNSP}" Margin="10,5,10,5">Install</Button>
 
-        <StatusBar Height="28" BorderBrush="SlateGray" BorderThickness="0,1,0,0" HorizontalContentAlignment="Right">
+        <StatusBar Grid.Row="3" Margin="0,5,0,0" Height="28" BorderBrush="SlateGray" BorderThickness="0,1,0,0" HorizontalContentAlignment="Right">
             <StatusBarItem HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{Binding StatusBarIcon}" Height="24" Width="24" VerticalAlignment="Center"></Image>
@@ -72,5 +82,5 @@
                 </ComboBox>
             </StatusBarItem>
         </StatusBar>
-    </StackPanel>
+    </Grid>
 </Window>

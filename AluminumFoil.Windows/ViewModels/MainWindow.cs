@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
@@ -139,7 +138,7 @@ namespace AluminumFoil.ViewModels
                 return;
             }
 
-            OpenNSPs(dlg.FileNames);   
+            OpenNSPs(dlg.FileNames);
         }
 
         public ReactiveCommand<string, bool> RemoveNSP { get; set; }
