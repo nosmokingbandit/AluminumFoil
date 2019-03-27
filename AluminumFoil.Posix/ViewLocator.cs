@@ -1,9 +1,9 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using AluminumFoil.Mac.ViewModels;
+using AluminumFoil.Posix.ViewModels;
 
-namespace AluminumFoil.Mac
+namespace AluminumFoil.Posix
 {
     public class ViewLocator : IDataTemplate
     {

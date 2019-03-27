@@ -6,13 +6,14 @@ obj/*.dll
 *.so
 *.dylib
 .vs/
+.idea/
 packages/
 
 AluminumFoil/bin/
 AluminumFoil/obj/
 
-AluminumFoil.Mac/bin/
-AluminumFoil.Mac/obj/
+AluminumFoil.Posix/bin/
+AluminumFoil.Posix/obj/
 
 AluminumFoil.Windows/bin/
 AluminumFoil.Windows/obj/
@@ -24,5 +25,6 @@ AluminumFoil.Windows/obj/
 *.out
 
 AluminumFoil/AluminumFoil\.csproj\.user
+*.DotSettings.user
 
 AluminumFoil\.Windows/publish/

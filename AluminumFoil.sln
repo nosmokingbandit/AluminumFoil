@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AluminumFoil", "AluminumFoil\AluminumFoil.csproj", "{D8E09E76-550C-4F75-8979-A3E66DC650C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AluminumFoil.Mac", "AluminumFoil.Mac\AluminumFoil.Mac.csproj", "{D455DB97-EEAD-459A-A5A1-278E4A9FAB5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AluminumFoil.Posix", "AluminumFoil.Posix\AluminumFoil.Posix.csproj", "{D455DB97-EEAD-459A-A5A1-278E4A9FAB5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AluminumFoil.Windows", "AluminumFoil.Windows\AluminumFoil.Windows.csproj", "{900594F1-9033-4828-825A-47D58B7285A6}"
 EndProject

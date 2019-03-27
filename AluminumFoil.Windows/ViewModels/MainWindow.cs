@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
@@ -165,7 +166,7 @@ namespace AluminumFoil.ViewModels
             {
                 await Task.Run(() =>
                 {
-                    Func<ObservableCollection<NSP>, IEnumerable<Tuple<string, string>>> installer = null;
+                    Func<ObservableCollection<NSP>, IEnumerable<(string, string)>> installer = null;
                     switch (InstallationTarget)
                     {
                         case "GoldLeaf":
@@ -181,10 +182,10 @@ namespace AluminumFoil.ViewModels
                         return;
                     };
 
-                    foreach (Tuple<string, string> statusUpdate in installer(OpenedNSP))
+                    foreach ((string text, string icon) in installer(OpenedNSP))
                     {
-                        StatusBar = statusUpdate.Item1;
-                        StatusBarIcon = statusUpdate.Item2;
+                        StatusBar = text;
+                        StatusBarIcon = icon;
                     }
                 });
                 var finDlg = new Dialogs.Success("Installation Finished", "Neat");

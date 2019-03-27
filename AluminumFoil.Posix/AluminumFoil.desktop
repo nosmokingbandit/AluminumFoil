@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+TryExec=/usr/share/AluminumFoil.Posix/AluminumFoil.Posix
+Exec=/usr/share/AluminumFoil.Posix/AluminumFoil.Posix
+Icon=/usr/share/icons/AluminumFoil.png
+Terminal=false
+Categories=System;Nintendo
+
+Name=AluminumFoil
+GenericName=AluminumFoil
+Comment=A cross-platform homebrew nsp installer for Tinfoil and Goldleaf
+StartupWMClass=AluminumFoil
