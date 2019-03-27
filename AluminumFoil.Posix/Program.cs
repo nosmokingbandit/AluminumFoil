@@ -2,7 +2,7 @@
 using Avalonia.Logging.Serilog;
 using System.Runtime.InteropServices;
 
-namespace AluminumFoil.Mac
+namespace AluminumFoil.Posix
 {
     class Program
     {

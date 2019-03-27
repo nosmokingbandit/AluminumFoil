@@ -7,7 +7,7 @@ using System.IO;
 
 namespace GoldLeaf
 {
-    using InstallUpdate = Tuple<string, string>;
+    using InstallUpdate = ValueTuple<string, string>;
 
     public class GoldLeaf
     {
@@ -35,7 +35,7 @@ namespace GoldLeaf
             return "";
         }
 
-        public IEnumerable<Tuple<string, string>> InstallNSP(ObservableCollection<AluminumFoil.NSP> NSPs)
+        public IEnumerable<(string, string)> InstallNSP(ObservableCollection<AluminumFoil.NSP> NSPs)
         {
             AluminumFoil.NSP nsp = NSPs.First();
 

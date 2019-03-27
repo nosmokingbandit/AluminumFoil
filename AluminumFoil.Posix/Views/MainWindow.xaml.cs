@@ -2,18 +2,18 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace AluminumFoil.Mac.Views
+namespace AluminumFoil.Posix.Views
 {
     public class MainWindow : AutoHeightWindow
     {
         public MainWindow()
         {
-            this.Width = 400;
-            this.MinWidth = 400;
-            this.CanResize = false;
-            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            Width = 400;
+            MinWidth = 400;
+            CanResize = false;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            this.DataContext = new ViewModels.MainWindow();
+            DataContext = new ViewModels.MainWindow();
             InitializeComponent();
 #if DEBUG
             this.AttachDevTools();

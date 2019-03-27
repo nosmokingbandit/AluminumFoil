@@ -3,6 +3,7 @@
         Name="Window"
         xmlns:converters="clr-namespace:BindingConverters"
         Title="AluminumFoil"
+        Icon="resm:AluminumFoil.Posix.Assets.Images.Icon.png"
         >
 
     <Window.Resources>
@@ -45,7 +46,7 @@
                                 </Grid>
                                
                                 <Button Grid.Column="1" Width="24" Height="24" Margin="8,0,8,0" Command="{Binding $parent[ItemsControl].DataContext.RemoveNSP}" CommandParameter="{Binding FilePath}" BorderThickness="0" Background="Transparent" Padding="0">
-                                    <Image Source="resm:AluminumFoil.Mac.Assets.Images.close_16.png" Height="16" VerticalAlignment="Center"/>
+                                    <Image Source="resm:AluminumFoil.Posix.Assets.Images.close_16.png" Height="16" VerticalAlignment="Center"/>
                                 </Button>
                                 
                             </Grid>
