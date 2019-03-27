@@ -7,7 +7,6 @@
         mc:Ignorable="d"
         Title="Aluminum Foil"
         SizeToContent="Height"
-        MaxHeight="600"
         MinWidth="400"
         Width="400"
         WindowStartupLocation="CenterScreen"
@@ -33,7 +32,7 @@
         </Button>
 
         <GroupBox Grid.Row="1" Header="Opened NPSs" Margin="10,0,10,5">
-            <ScrollViewer MinHeight="48">
+            <ScrollViewer MinHeight="16" MaxHeight="300">
                 <ItemsControl ItemsSource="{Binding OpenedNSP}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -66,7 +65,9 @@
             </ScrollViewer>
         </GroupBox>
 
-        <Button Grid.Row="2" Command="{Binding InstallNSP}" Margin="10,5,10,5">Install</Button>
+        <Button Grid.Row="2" Command="{Binding InstallNSP}" Margin="10,5,10,5">
+            Install
+        </Button>
 
         <StatusBar Grid.Row="3" Margin="0,5,0,0" Height="28" BorderBrush="SlateGray" BorderThickness="0,1,0,0" HorizontalContentAlignment="Right">
             <StatusBarItem HorizontalAlignment="Right">
