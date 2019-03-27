@@ -3,83 +3,96 @@
         Name="Window"
         xmlns:converters="clr-namespace:BindingConverters"
         Title="AluminumFoil"
+        MinWidth="400"
+        Width="400"
         Icon="resm:AluminumFoil.Posix.Assets.Images.Icon.png"
         >
 
     <Window.Resources>
         <converters:BitmapValueConverter x:Key="BitmapValueConverter"/>
     </Window.Resources>
-    
+
     <StackPanel x:Name="MainPanel">
-        <StackPanel Margin="10">
-            <Button Grid.Column="0" Command="{Binding OpenFileDialog}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0" Margin="10,10,10,5" Command="{Binding OpenFileDialog}">
                 Open NSP
             </Button>
-            <Border x:Name="GroupBox" 
+            <Border x:Name="GroupBox"
+                    Grid.Row="1"
                     BorderBrush="#b2b2b2"
                     BorderThickness="1"
                     CornerRadius="2"
-                    Margin="0,10,0,10"
+                    Margin="10,5,10,5"
                     MinHeight="16"
                     >
-                <ItemsControl Items="{Binding OpenedNSP}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0,5,0,5">
-                                <!-- There has to be a better way than this -->
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid Grid.Column="0" Margin="10,0,10,0">
+                <ScrollViewer MinHeight="16" MaxHeight="300">
+                    <ItemsControl Items="{Binding OpenedNSP}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,5,0,5">
+                                    <!-- There has to be a better way than this -->
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition Height="4"/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding BaseName}" VerticalAlignment="Bottom"></TextBlock>
-                                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding HumanSize}" VerticalAlignment="Bottom"></TextBlock>
-                                    <ProgressBar Grid.ColumnSpan="2" Grid.Row="1" Maximum="{Binding Size}" Value="{Binding Transferred}" MinHeight="4"/>
+                                    <Grid Grid.Column="0" Margin="10,0,10,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="4"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding BaseName}" VerticalAlignment="Bottom"></TextBlock>
+                                        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding HumanSize}" VerticalAlignment="Bottom"></TextBlock>
+                                        <ProgressBar Grid.ColumnSpan="2" Grid.Row="1" Maximum="{Binding Size}" Value="{Binding Transferred}" MinHeight="4"/>
+                                    </Grid>
+
+                                    <Button Grid.Column="1" Width="24" Height="24" Margin="8,0,8,0" Command="{Binding $parent[ItemsControl].DataContext.RemoveNSP}" CommandParameter="{Binding FilePath}" BorderThickness="0" Background="Transparent" Padding="0">
+                                        <Image Source="resm:AluminumFoil.Posix.Assets.Images.close_16.png" Height="16" VerticalAlignment="Center"/>
+                                    </Button>
+
                                 </Grid>
-                               
-                                <Button Grid.Column="1" Width="24" Height="24" Margin="8,0,8,0" Command="{Binding $parent[ItemsControl].DataContext.RemoveNSP}" CommandParameter="{Binding FilePath}" BorderThickness="0" Background="Transparent" Padding="0">
-                                    <Image Source="resm:AluminumFoil.Posix.Assets.Images.close_16.png" Height="16" VerticalAlignment="Center"/>
-                                </Button>
-                                
-                            </Grid>
-                        </DataTemplate> 
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
             </Border>
-            <Button Command="{Binding InstallNSP}" Margin="0,0,0,0">Install</Button>
-        </StackPanel>
 
-        <Grid x:Name="StatusBar" Height="28">
-             <Grid.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,28">
-                    <GradientStop Color="#424242" Offset="0.0" />
-                    <GradientStop Color="#EEEEEE" Offset="0.03" />
-                    <GradientStop Color="#9E9E9E" Offset="1.0" />
-                </LinearGradientBrush>
-            </Grid.Background>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
+            <Button Grid.Row="2" Command="{Binding InstallNSP}" Margin="10,5,10,5">
+                Install
+            </Button>
 
-            <StackPanel Grid.Column="0" Orientation="Horizontal">
-                <Image Source="{Binding StatusBarIcon, Converter={StaticResource BitmapValueConverter}}"></Image>
-                <TextBlock Text="{Binding StatusBar}" VerticalAlignment="Center"></TextBlock>
-            </StackPanel>    
-            <DropDown x:Name="cbTarget" Grid.Column="1" Padding="5" Margin="10,0,0,0" IsEnabled="{Binding AllowActions}" SelectedIndex="0" SelectionChanged="ChangeInstallationTarget" BorderThickness="0">
-                <DropDownItem>GoldLeaf</DropDownItem>
-                <DropDownItem>TinFoil</DropDownItem>    
-            </DropDown>
+            <Grid x:Name="StatusBar" Grid.Row="3" Margin="0,5,0,0" Height="28">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,28">
+                        <GradientStop Color="#424242" Offset="0.0" />
+                        <GradientStop Color="#EEEEEE" Offset="0.03" />
+                        <GradientStop Color="#9E9E9E" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Image Source="{Binding StatusBarIcon, Converter={StaticResource BitmapValueConverter}}"></Image>
+                    <TextBlock Text="{Binding StatusBar}" VerticalAlignment="Center"></TextBlock>
+                </StackPanel>
+                <DropDown x:Name="cbTarget" Grid.Column="1" Padding="5" Margin="10,0,0,0" IsEnabled="{Binding AllowActions}" SelectedIndex="0" SelectionChanged="ChangeInstallationTarget" BorderThickness="0">
+                    <DropDownItem>GoldLeaf</DropDownItem>
+                    <DropDownItem>TinFoil</DropDownItem>
+                </DropDown>
+            </Grid>
         </Grid>
     </StackPanel>
-
-
-</Window> 
+</Window>

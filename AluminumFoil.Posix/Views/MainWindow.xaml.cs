@@ -8,9 +8,6 @@ namespace AluminumFoil.Posix.Views
     {
         public MainWindow()
         {
-            Width = 400;
-            MinWidth = 400;
-            CanResize = false;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             DataContext = new ViewModels.MainWindow();
