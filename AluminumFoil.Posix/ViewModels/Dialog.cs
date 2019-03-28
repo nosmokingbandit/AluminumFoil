@@ -1,6 +1,6 @@
 ﻿using ReactiveUI;
 
-namespace AluminumFoil.Mac.ViewModels
+namespace AluminumFoil.Posix.ViewModels
 {
     public class Dialog : ReactiveObject
     // Base vm for dialogs to set title and message

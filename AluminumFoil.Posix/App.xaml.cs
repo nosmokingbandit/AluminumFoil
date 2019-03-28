@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Markup.Xaml;
 
-namespace AluminumFoil.Mac
+namespace AluminumFoil.Posix
 {
     public class App : Application
     {

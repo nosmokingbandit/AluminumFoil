@@ -7,7 +7,7 @@ using System.IO;
 
 namespace TinFoil
 {
-    using InstallUpdate = Tuple<string, string>;
+    using InstallUpdate = ValueTuple<string, string>;
 
     public class TinFoil
     {
@@ -29,7 +29,7 @@ namespace TinFoil
         }
 
 
-        public IEnumerable<Tuple<string, string>> InstallNSP(ObservableCollection<AluminumFoil.NSP> NSPs)
+        public IEnumerable<(string, string)> InstallNSP(ObservableCollection<AluminumFoil.NSP> NSPs)
         {
             // Installs NSP to Switch via TinFoil
             using (AluminumFoil.Switch NX = new AluminumFoil.Switch())
