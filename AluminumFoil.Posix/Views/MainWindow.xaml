@@ -31,8 +31,9 @@
                     CornerRadius="2"
                     Margin="10,5,10,5"
                     MinHeight="16"
+                    MaxHeight="600"
                     >
-                <ScrollViewer MinHeight="16" MaxHeight="300">
+                <ScrollViewer MinHeight="16">
                     <ItemsControl Items="{Binding OpenedNSP}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
