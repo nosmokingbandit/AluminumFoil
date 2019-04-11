@@ -1,5 +1,6 @@
 ﻿<Window x:Class="AluminumFoil.Windows.MainWindow" x:Name="Window" 
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:converters="clr-namespace:AluminumFoil.Windows.BindingConverters"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" Title="Aluminum Foil" SizeToContent="Height" MinWidth="400" Width="400" WindowStartupLocation="CenterScreen" Loaded="WindowLoaded">
@@ -8,12 +9,14 @@
         <Style TargetType="Button">
             <Setter Property="Padding" Value="5" />
         </Style>
+        <converters:BoolToInvisibility x:Key="BoolToInvisibility" />
     </Window.Resources>
 
     <Grid VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -60,7 +63,11 @@
             Install
         </Button>
 
-        <StatusBar Grid.Row="3" Margin="0,5,0,0" Height="28" BorderBrush="SlateGray" BorderThickness="0,1,0,0" HorizontalContentAlignment="Right">
+        <Button Grid.Row="3" Command="{Binding CancelInstall}" Visibility="{Binding AllowActions, Converter={StaticResource BoolToInvisibility}}" Margin="10,5,10,5">
+            Cancel
+        </Button>
+
+        <StatusBar Grid.Row="4" Margin="0,5,0,0" Height="28" BorderBrush="SlateGray" BorderThickness="0,1,0,0" HorizontalContentAlignment="Right">
             <StatusBarItem HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{Binding StatusBarIcon}" Height="24" Width="24" VerticalAlignment="Center"></Image>
