@@ -30,8 +30,8 @@ namespace AluminumFoil
         public override void WriteLine(string value)
         {
 
-            Writer.WriteLine(DateTime.Now + value);
-            
+            Writer.WriteLine($"[{DateTime.Now}] {value}");
+
         }
 
         private readonly StreamWriter Writer;

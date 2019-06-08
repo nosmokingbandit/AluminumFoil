@@ -1,8 +1,5 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
-using System;
 using System.Linq;
-using System.Windows.Input;
 namespace AluminumFoil.Windows
 {
     public partial class MainWindow : Window
@@ -18,6 +15,7 @@ namespace AluminumFoil.Windows
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             this.MinHeight = this.DesiredSize.Height;
+            this.MaxHeight = this.DesiredSize.Height - GroupBoxNSPs.DesiredSize.Height + GroupBoxNSPs.MaxHeight;
         }
 
         private void VerifyDragNSPs(object sender, DragEventArgs e)

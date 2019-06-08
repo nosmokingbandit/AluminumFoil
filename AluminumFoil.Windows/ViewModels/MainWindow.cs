@@ -1,24 +1,31 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading;
 using ReactiveUI;
 using System.Reactive;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
-namespace AluminumFoil.ViewModels
+namespace AluminumFoil.Windows.ViewModels
 {
     public class MainWindow : ReactiveObject
     {
         public MainWindow()
         {
-            InstallNSP = ReactiveCommand.Create(_InstallNSP, this.WhenAnyValue(vm => vm.OpenedNSP.Count, vm => vm.AllowActions, (a, b) => a != 0 && b));
+            InstallNSP = ReactiveCommand.Create( () => { this.InstallationSubscription = StartInstallation.Execute().Subscribe(); },
+                this.WhenAnyValue(vm => vm.OpenedNSP.Count, vm => vm.AllowActions, (a, b) => a != 0 && b));
+
+            StartInstallation = ReactiveCommand.Create(_StartInstallation);
             OpenFileDialog = ReactiveCommand.Create(_OpenFileDialog, this.WhenAnyValue(vm => vm.AllowActions));
             RemoveNSP = ReactiveCommand.Create<string, bool>((f) => _RemoveNSP(f), this.WhenAnyValue(vm => vm.AllowActions));
+            AskCancelInstall = ReactiveCommand.Create(_AskCancelInstall);
         }
 
         #region properties
+        private IDisposable InstallationSubscription { get; set; }
+
         private string _InstallationTarget = "GoldLeaf";
         public string InstallationTarget
         {
@@ -123,6 +130,18 @@ namespace AluminumFoil.ViewModels
         #endregion
 
         #region button commands
+        public ReactiveCommand<Unit, Unit> AskCancelInstall { get; set; }
+        private void _AskCancelInstall()
+        {
+            var dlg = new Dialogs.CancelInstall();
+            dlg.ShowDialog();
+            if ((bool)dlg.DialogResult)
+            {
+                InstallationSubscription.Dispose();
+                InstallationSubscription = null;
+            }
+        }
+
         public ReactiveCommand<Unit, Unit> OpenFileDialog { get; set; }
         private void _OpenFileDialog()
         {
@@ -157,8 +176,11 @@ namespace AluminumFoil.ViewModels
             return true;
         }
 
+
         public ReactiveCommand<Unit, Unit> InstallNSP { get; set; }
-        private async void _InstallNSP()
+
+        private ReactiveCommand<Unit, Unit> StartInstallation { get; set; }
+        private async void _StartInstallation()
         {
             AllowActions = false;
             try

@@ -1,12 +1,6 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Name="Window"
-        xmlns:converters="clr-namespace:BindingConverters"
-        Title="AluminumFoil"
-        MinWidth="400"
-        Width="400"
-        Icon="resm:AluminumFoil.Posix.Assets.Images.Icon.png"
-        >
+﻿<Window xmlns="https://github.com/avaloniaui" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="Window" 
+    xmlns:converters="clr-namespace:BindingConverters" Title="AluminumFoil" MinWidth="400" Width="400" Icon="resm:AluminumFoil.Posix.Assets.Images.Icon.png">
 
     <Window.Resources>
         <converters:BitmapValueConverter x:Key="BitmapValueConverter"/>
@@ -24,15 +18,8 @@
             <Button Grid.Row="0" Margin="10,10,10,5" Command="{Binding OpenFileDialog}">
                 Open NSP
             </Button>
-            <Border x:Name="GroupBox"
-                    Grid.Row="1"
-                    BorderBrush="#b2b2b2"
-                    BorderThickness="1"
-                    CornerRadius="2"
-                    Margin="10,5,10,5"
-                    MinHeight="16"
-                    >
-                <ScrollViewer MinHeight="16" MaxHeight="300">
+            <Border x:Name="GroupBox" Grid.Row="1" BorderBrush="#b2b2b2" BorderThickness="1" CornerRadius="2" Margin="10,5,10,5" MinHeight="16" MaxHeight="600">
+                <ScrollViewer MinHeight="16">
                     <ItemsControl Items="{Binding OpenedNSP}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

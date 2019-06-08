@@ -1,9 +1,9 @@
-﻿using System.Linq;
+﻿using ExtensionMethods;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System;
-using ExtensionMethods;
 using System.IO;
+using System.Linq;
 
 namespace TinFoil
 {
@@ -28,7 +28,6 @@ namespace TinFoil
             return response;
         }
 
-
         public IEnumerable<(string, string)> InstallNSP(ObservableCollection<AluminumFoil.NSP> NSPs)
         {
             // Installs NSP to Switch via TinFoil
@@ -39,7 +38,7 @@ namespace TinFoil
                 NX.Write(MAGIC);
 
                 Console.WriteLine("Sending NSP names to TinFoil");
-                string concatenatedNames = string.Join("\n", NSPs.Select(n => n.BaseName)); 
+                string concatenatedNames = string.Join("\n", NSPs.Select(n => Uri.EscapeDataString(n.BaseName)));
 
                 byte[] namesBytes = concatenatedNames.AsBytes();
                 NX.Write(BitConverter.GetBytes(Convert.ToUInt32(namesBytes.Length)));
@@ -78,7 +77,7 @@ namespace TinFoil
                         ulong offset = BitConverter.ToUInt64(fileRangeRequest, 0x8);
                         ulong nameLen = BitConverter.ToUInt64(fileRangeRequest, 0x10);
 
-                        string selectedBaseName = NX.Read(Convert.ToInt32(nameLen)).AsString();
+                        string selectedBaseName = Uri.UnescapeDataString(NX.Read(Convert.ToInt32(nameLen)).AsString());
 
                         AluminumFoil.NSP selectedNSP = NSPs.FirstOrDefault(n => n.BaseName == selectedBaseName);
 

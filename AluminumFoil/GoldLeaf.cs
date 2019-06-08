@@ -1,11 +1,11 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System;
 using ExtensionMethods;
 using System.IO;
 
-namespace GoldLeaf
+namespace AluminumFoil
 {
     using InstallUpdate = ValueTuple<string, string>;
 
